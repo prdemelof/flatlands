@@ -1,0 +1,237 @@
+<!--
+useful js
+
+spawn item
+World.spawnObject({"object_id":"heart_1", "count":1, "coords": {"x":1248, "y": 650} });
+
+loop through tiles
+for(var x=0; x<map_1.length; x++) { for(var y=0; y<map_1[x].length; y++) { console.log('x: '+x+' y: '+y+' name: '+name); } }
+
+test camera range finder
+setInterval( function() { console.log( Camera.getViewRange() ); }, 500 )
+
+//combine both and display tiles within the camera view range
+function render() {
+	var render_count = 0;
+	var view_range = Camera.getViewRange();
+	//{top: 0, left: 0, right: 48, bottom: 27}
+	for(var y=view_range.top; y<view_range.bottom; y++) {
+		for(var x=view_range.left; x<view_range.right; x++) {
+			render_count++;
+			console.log('x: '+x+' y: '+y+' name: '+name);
+		}
+	}
+	console.log(render_count);
+	console.log('calculation: ' + ( (view_range.left + view_range.right) * view_range.bottom ));
+}
+
+
+-->
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="system/style.css">
+	<link rel="stylesheet" href="system/boostrap.css">
+</head>
+
+<div id="canvas_parent">
+	<!-- <div class="seasons_test_label" style="position: fixed; top: 55%; left: 50%; translate: -50% -50%; font-size:20px; padding: 3px 1px; width: 100px; text-align: center; color: white; background-color: rgba(255,255,255,.2); border: 1px solid white;">spring</div> -->
+	
+	
+	<div style="position: fixed; top: 0; left: 0;cursor:pointer; font-size:12px;text-align: center; color: white;background-color: rgba(255,255,255,.2);">
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="heart_1">heart</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="coin_1">coin</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="honey_1">honey</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="key_1">key</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="mushroom_1">mushroom 1</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="mushroom_2">mushroom 2</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="mushroom_3">mushroom 3</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="mushroom_4">mushroom 4</div>
+	</div>
+	<div style="position: fixed; top: 25px; left: 0;cursor:pointer; font-size:12px;text-align: center; color: white;background-color: rgba(255,255,255,.2);">
+		<div class="set_season" style=" padding: 3px 3px;  border: 1px solid white;" data-season="spring">spring</div>
+		<div class="set_season" style="padding: 3px 3px;  border: 1px solid white;" data-season="summer">summer</div>
+		<div class="set_season" style=" padding: 3px 3px;  border: 1px solid white;" data-season="fall">fall</div>
+		<div class="set_season" style=" padding: 3px 3px;  border: 1px solid white;" data-season="winter">winter</div>
+	</div>
+	
+	
+	
+	
+	<canvas></canvas>
+</div>
+
+<!--starting the game-->
+<div id="start_menu">
+	<div class="content">
+		<div style="margin-top:270px;">
+			<p class="small_fonts menu_font_lg">Adventures in <span class="color_blue">Flatlands</span></p>
+			<a class="start_menu_play btn btn-primary" style="width:100px;margin:30px auto 0 auto;display:block;">Play</a>
+		</div>
+	</div>
+</div>
+
+<!--press ESC for in-game menu-->
+<div id="ingame_menu">
+	<div class="content">
+		<div style="margin-top:270px;">
+			<p class="small_fonts menu_font_lg color_white">Paused</p>
+			
+			<div class="menu_group">
+				<p class="small_fonts">Music Volume</p>
+				<div class="slider">
+					<input class="range_volume" data-type="music" type="range" value="10" step="1" min="0" max="10">
+				</div>
+			</div>
+			
+			<div class="menu_group">
+				<p class="small_fonts">Effects Volume</p>
+				<div class="slider">
+					<input class="range_volume" data-type="sfx" type="range" value="10" step="1" min="0" max="10">
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<div id="loading_teleporter_1"></div>
+
+<!--object inspector box-->
+<div id="object_inspector_box" class="">
+	<p></p>
+</div>
+
+<script src="system/jquery-3.2.1.js"></script>
+
+<script>
+
+
+
+
+
+
+//TESTING STUFF
+
+$('.set_season').click(function() {
+	World.setSeason($(this).attr('data-season'));
+});
+$('.spawner').click(function() {
+	//World.spawnObject({"object_id":"heart_1", "count":1, "coords": {"x":1248, "y": 650} });
+	World.spawnObject({"object_id":$(this).attr('data-item-id'), "count":1, "coords": { "x":( player.dir == 'left' ? player.coords.x-32 : player.coords.x+32 ), "y": player.coords.y } });
+});
+/*
+{ "name":"coin", "coords": {"x": 1808, "y": 640}, "animation": {"x":0, "y":0, "frames":12, "speed":2, "frame": 0, "frames_passed": 0} },
+{ "name":"honey", "coords": {"x": 1056, "y": 672}, "animation": {"x":0, "y":1, "frames":4, "speed":2, "frame": 0, "frames_passed": 0} },
+{ "name":"heart", "coords": {"x": 1952, "y": 704}, "animation": {"x":0, "y":2, "frames":4, "speed":2, "frame": 0, "frames_passed": 0} },
+{ "name":"key", "coords": {"x": 1344, "y": 703}, "animation": {"x":0, "y":3, "frames":4, "speed":2, "frame": 0, "frames_passed": 0} },
+{ "name":"mushroom", "coords": {"x": 2112, "y": 704}, "animation": {"x":0, "y":7, "frames":4, "speed":2, "frame": 0, "frames_passed": 0} },
+*/
+//var setSeason = function(season) {
+//	World.starting_season = season;
+//}
+
+//TESTING STUFF
+
+
+
+//resize the canvas
+//$('#canvas_parent').height(window.innerHeight - ( 1 / 6 * window.innerHeight ));
+$('#canvas_parent').height( 27*32 ); //27 tiles
+$('#canvas_parent').width(window.innerWidth - ( 1 / 5 * window.innerWidth ) );
+
+var config = {
+	paused: true,
+	pause: function() {this.paused=true;},
+	unpause: function() {this.paused=false;},
+	frame_rate: 30,
+};
+config.player_start_coords = {
+	x: $('#canvas_parent').width() - ( $('#canvas_parent').width() / 2) - 16,
+	y: 673 //32 is the player height
+};
+</script>
+
+<script src="Items.js"></script>
+<script src="system/helpers.js"></script>
+<script src="System.js"></script>
+<script src="CollisionDetection.js"></script>
+<script src="Camera.js"></script>
+<script src="Hud.js"></script>
+<script src="InputManager.js"></script>
+<script src="World.js"></script>
+<script src="SoundEngine.js"></script>
+<script src="Options.js"></script>
+<script src="Player.js"></script>
+
+<script>
+Options.init();
+SoundEngine.init();
+
+hud.init();
+World.init();
+
+player.coords.x = World.size.x*32 - ( (World.size.x*32) / 2) - 16;
+//config.player_start_coords.y = $('#canvas_parent').height() - ( 1 / 6 * window.innerHeight ) - 32;
+Camera.offset.x = -player.coords.x + (hud.canvas_parent.width/2) - 16;
+
+hud.toggleStartMenu();
+
+loop = setInterval(function() {
+	if(config.paused && !hud.show_start_menu) return;
+	refresh();
+	if(hud.show_start_menu) {
+		drawStartMenu();
+	} else {
+		drawGame();
+	}
+//}, config.frame_rate / 1000);
+}, 1000 / config.frame_rate);
+
+</script>
+
+<script>
+
+function drawStartMenu() {
+	//hud.drawStartMenu();
+	drawGame();
+}
+
+function drawGame() {
+	hud.canvas.save();
+	hud.canvas.translate(Camera.offset.x, Camera.offset.y);
+	
+	//World.drawGround();
+	//World.drawDecorations();
+	World.draw();
+	player.update();
+	hud.update();
+	
+	hud.canvas.restore();
+}
+
+function quit() {
+	//run = false;
+	clearInterval(loop);
+	console.log("quitting");
+}
+
+function refresh() {
+	//hud.canvas.clearRect(0, 0, hud.canvas_parent.width, hud.canvas_parent.height);
+	//if(hud.show_start_menu) {
+	//	hud.canvas.fillStyle = hud.start_menu_color;
+	//} else {
+		hud.canvas.fillStyle = World.sky_color;
+	//}
+	hud.canvas.fillRect(0, 0, hud.canvas_parent.width, hud.canvas_parent.height);
+}
+</script>
+
+<script>
+$(document).ready(function() {
+	
+});
+</script>
+
