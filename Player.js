@@ -340,7 +340,7 @@ var player = {
 						tile_id--; //we need this because the tileset doesnt start at 0, it starts at 1
 						
 						//if(typeof World.map.tileset.tiles[tile_id] == 'undefined' || !World.map.tileset.tiles[tile_id].visible) {
-						if(typeof World.map.tileset.colliders[tile_id] == 'undefined' || !World.map.tileset.colliders[tile_id].active) {
+						if(typeof World.map.tileset.colliders[tile_id] == 'undefined' ) {
 							//this tile is not collidable or is disabled
 							continue;
 						}
@@ -445,7 +445,7 @@ var player = {
 						continue;
 					};
 					tile_id--; //we need this because the tileset doesnt start at 0, it starts at 1
-					if(typeof World.map.tileset.colliders[tile_id] == 'undefined' || !World.map.tileset.colliders[tile_id].active) {
+					if(typeof World.map.tileset.colliders[tile_id] == 'undefined' ) {
 						//this tile is not collidable or is disabled
 						//console.log('7 - not colidable - tile_id: '+tile_id);
 						continue;
