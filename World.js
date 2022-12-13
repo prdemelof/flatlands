@@ -160,7 +160,8 @@ var World = {
 					
 					//destination coords
 					object.coords.x, //pixel precision
-					object.coords.y, //pixel precision
+					//object.coords.y, //pixel precision
+					object.coords.y - (object.size.height * World.map.tileset.tileheight), //pixel precision
 					
 					//destination size
 					World.map.tileset.tilewidth,
