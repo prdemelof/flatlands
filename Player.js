@@ -466,9 +466,9 @@ var player = {
 					], false);
 					if(!colliding) continue; //try the next tile.. we try a total of 3 underneath the character
 					if(colliding) {
-						if( player.coords.y != y*32 && player.movement_state != 'ascending' ) {
+						if( player.coords.y != y*player.image.height && player.movement_state != 'ascending' ) {
 							//player is colliding with ground but is not exactly level with the ground... sometimes this happens for some reason, character digs into the ground a little
-							player.coords.y = y * World.map.tileset.tileheight - 32;
+							player.coords.y = y * World.map.tileset.tileheight - player.image.height;
 						}
 					}
 					return colliding;
