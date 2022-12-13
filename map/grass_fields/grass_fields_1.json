@@ -18,35 +18,53 @@
 		"opacity": 1,
 		"visible": true,
 		"data": [
-			{ "name":"teleporter_1", "coords": {"x": 2480, "y": 160}, "size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0} },
-			{ "name":"teleporter_2", "coords": {"x": 1186, "y": 608}, "size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0} },
-			
-			
-			{ "name":"to jungle", "coords": {"x": 2272, "y": 128}, "size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0} },
-			{ "name":"to desert", "coords": {"x": 2176, "y": 128}, "size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0} },
-			{ "name":"to ice", "coords": {"x": 2080, "y": 128}, "size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0} },
-			
-			
 			{ "name":"water1", "coords": {"x": 416, "y": 704}, "animation": {"x":0, "y":8, "frames":8, "speed":2, "frame": 0, "frames_passed": 0} },
 			{ "name":"water2", "coords": {"x": 448, "y": 704}, "animation": {"x":0, "y":8, "frames":8, "speed":2, "frame": 0, "frames_passed": 0} },
 			{ "name":"water3", "coords": {"x": 480, "y": 704}, "animation": {"x":0, "y":8, "frames":8, "speed":2, "frame": 0, "frames_passed": 0} }
 		]
 	},
 	"teleporters": {
+		
+		"3": {
+			"65": {
+				"name": "to snow_1",
+				"to_biome": "snow",
+				"to_map": "snow_1",
+				"to_coords": {"x":2480, "y":128},
+				"size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0}
+			},
+			"68": {
+				"name": "to desert_1",
+				"to_biome": "desert",
+				"to_map": "desert_1",
+				"to_coords": {"x":2480, "y":128},
+				"size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0}
+			},
+			"71": {
+				"name": "to jungle_1",
+				"to_biome": "jungle",
+				"to_map": "jungle_1",
+				"to_coords": {"x":2480, "y":128},
+				"size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0}
+			}
+		},
+		
 		"18": {
 			"37": {
-				"name": "ground",
+				"name": "to top",
 				"to_biome": "grass_fields",
 				"to_map": "grass_fields_1",
-				"to_coords": {"x":2480, "y":128}
+				"to_coords": {"x":2465, "y":128},
+				"size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0}
 			}
 		},
 		"4": {
 			"77": {
-				"name": "debug_area",
+				"name": "to bottom",
 				"to_biome": "grass_fields",
 				"to_map": "grass_fields_1",
-				"to_coords": {"x":1184, "y":576}
+				"to_coords": {"x":1184, "y":576},
+				"size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0}
 			}
 		}
 	},
