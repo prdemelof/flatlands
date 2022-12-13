@@ -9,7 +9,7 @@ var CollisionDetection = {
 			}, two: ...
 		]*/
 		//SHOW BOUNDING BOX
-		if(typeof render != 'undefined' && render) {
+		if(false || (typeof render != 'undefined' && render)) {
 			hud.canvas.fillStyle = "purple";
 			hud.canvas.fillRect(
 				//destination coords

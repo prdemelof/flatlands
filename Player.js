@@ -123,7 +123,11 @@ var player = {
 		if(player.movement_state == 'climbing') {
 			//TODO: handle the climbing case
 		} else {
-			if(!player.on_ground) player.velocity.y += World.gravity;
+			if(!player.on_ground) {
+				//if(player.velocity.y <= 15) { //limit fall speed
+					player.velocity.y += World.gravity;
+				//}
+			}
 			player.velocity.y += 0;
 			player.coords.y += player.velocity.y;
 		}
@@ -446,13 +450,6 @@ var player = {
 						//console.log('7 - not colidable - tile_id: '+tile_id);
 						continue;
 					}
-					var collided_player = {
-						//x: ( player.dir == 'left' ? player.coords.x : player.coords.x ),
-						x: player.coords.x ,
-						y: player.coords.y,
-						z: player.image.height,
-						w: player.image.width 
-					};
 					var collided_tile_coords = {
 						x: x * World.map.tileset.tilewidth,
 						y: y * World.map.tileset.tileheight,
@@ -460,12 +457,11 @@ var player = {
 						w: World.map.tileset.colliders[tile_id].width
 					};
 					colliding = CollisionDetection.isColliding([
-						//{x:player.coords.x, y:player.coords.y+32, z:player.image.height, w:player.image.width},
-						{x:collided_player.x, y:collided_player.y, z:collided_player.z, w:collided_player.w},
+						{x:player.coords.x, y:player.coords.y + player.image.height - player.velocity.y, z:1 + player.velocity.y, w:player.image.width},
 						//tile
 						{
-							x: collided_tile_coords.x, y: collided_tile_coords.y-1,
-							z: collided_tile_coords.z, w: collided_tile_coords.w
+							x: collided_tile_coords.x, y: collided_tile_coords.y, //-1
+							z: 1, w: collided_tile_coords.w
 						}
 					], false);
 					if(!colliding) continue; //try the next tile.. we try a total of 3 underneath the character
