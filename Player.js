@@ -57,6 +57,7 @@ var player = {
 		
 		//teleport
 		var teleporting = false;
+		player.collideWithTeleporters(); //aaaaaaaaaaaaaaaaa
 		if(player.on_ground && player.movement_state == 'idle' && inputManager.key_w) {
 			var teleporting = player.collideWithTeleporters();
 			if(teleporting) {
@@ -537,7 +538,7 @@ var player = {
 								x: World.map.tileset.tilewidth * x, y: (World.map.tileset.tileheight * y),
 								z: World.map.tileset.tileheight, w: World.map.tileset.tileheight
 							}
-						]);
+						], true); //render? true or false
 						if(colliding) {
 							return World.map.teleporters[y][x];
 						} else {

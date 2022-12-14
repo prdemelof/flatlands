@@ -199,20 +199,6 @@ var World = {
 					this_object.coords.y
 				);*/
 				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 				if(typeof object.animation == 'undefined') {
 					//static non-animated sprite
 					
@@ -236,7 +222,6 @@ var World = {
 						World.map.tileset.tileheight
 					);
 				} else {
-					
 					//animated sprite
 					hud.canvas.drawImage(
 						//image
@@ -273,99 +258,6 @@ var World = {
 					} else {
 						object.animation.frames_passed++;
 					}
-				}
-				
-			}
-			
-		}
-		
-		return;
-		
-		
-		for(var object_i=0; object_i<World.map.teleporters.data.length; object_i++) {
-			var object = World.map.teleporters.data[object_i];
-			//we loop through every object and filter out those outside of the screen
-			if(
-				object.coords.y < view_range.top - (World.draw_margin.top * World.map.tileset.tileheight) ||
-				object.coords.y > view_range.bottom + (World.draw_margin.bottom * World.map.tileset.tileheight) ||
-				object.coords.x < view_range.left - (World.draw_margin.left * World.map.tileset.tilewidth) ||
-				object.coords.x > view_range.right + (World.draw_margin.right * World.map.tileset.tilewidth)
-			) {
-				continue;
-			}
-			if(typeof object.move != 'undefined') {
-				//todo: find a way to specify whether the y position should be random or not
-				//todo: find a way to specify whether the item should re-spawn when out of bounds and where to respawn
-				if(object.direction == 'right') var new_x = object.coords.x + object.speed;
-				else var new_x = object.coords.x - object.speed;
-				if(new_x > World.size.x * 32) {
-					//spawn back on the left
-					new_x = 0 - World.objects[object_type][object].image.width;
-					//randomize the y position
-					object.coords.y = 60 + Math.floor(Math.random() * 150);
-				}
-				object.coords.x = new_x;
-			}
-			//draw
-			/*//using single image per object
-			hud.canvas.drawImage(
-				World.data[object_type][object].image,
-				this_object.coords.x,
-				this_object.coords.y
-			);*/
-			if(typeof object.animation == 'undefined') {
-				//static non-animated sprite
-				hud.canvas.drawImage(
-					//image
-					World.map.tileset.spritesheet_image,
-					//source coords
-					//duno why, in normal draw layers thing we need to do tile_width-1 but here we dont need the -1
-					((object.tile_id) % (World.map.tileset.spritesheet_width / World.map.tileset.tilewidth)) * World.map.tileset.tilewidth, //sx,
-					~~((object.tile_id) / (World.map.tileset.spritesheet_width / World.map.tileset.tileheight)) * World.map.tileset.tileheight, //sy,
-					//source size
-					World.map.tileset.tilewidth,
-					World.map.tileset.tileheight,
-					//destination coords
-					object.coords.x, //pixel precision
-					object.coords.y - World.map.tileset.tileheight, //pixel precision
-					//destination size
-					World.map.tileset.tilewidth,
-					World.map.tileset.tileheight
-				);
-			} else {
-				//animated sprite
-				hud.canvas.drawImage(
-					//image
-					World.map.tileset.spritesheet_image,
-					
-					//source coords
-					//duno why, in normal draw layers thing we need to do tile_width-1 but here we dont need the -1
-					(
-						object.animation.frames > 1 ? (object.animation.x*World.map.tileset.tilewidth) + (World.map.tileset.tilewidth * object.animation.frame) :
-						object.animation.x * World.map.tileset.tilewidth
-					),
-					World.map.tileset.tileheight * object.animation.y,
-					
-					//source size
-					World.map.tileset.tilewidth,
-					( typeof object.size != 'undefined' ? object.size.height * World.map.tileset.tileheight : World.map.tileset.tileheight), //this sprite has a custom size?
-					
-					//destination coords
-					object.coords.x, //pixel precision
-					//object.coords.y, //pixel precision
-					object.coords.y - (object.size.height * World.map.tileset.tileheight), //pixel precision
-					
-					//destination size
-					World.map.tileset.tilewidth,
-					( typeof object.size != 'undefined' ? object.size.height * World.map.tileset.tileheight : World.map.tileset.tileheight), //this sprite has a custom size?
-					
-				);
-				if(object.animation.frames_passed > object.animation.speed) {
-					if(object.animation.frame < object.animation.frames - 1) object.animation.frame++;
-					else object.animation.frame = 0;
-					object.animation.frames_passed = 0;
-				} else {
-					object.animation.frames_passed++;
 				}
 			}
 		}
