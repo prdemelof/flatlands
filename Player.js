@@ -57,7 +57,6 @@ var player = {
 		
 		//teleport
 		var teleporting = false;
-		player.collideWithTeleporters(); //aaaaaaaaaaaaaaaaa
 		if(player.on_ground && player.movement_state == 'idle' && inputManager.key_w) {
 			var teleporting = player.collideWithTeleporters();
 			if(teleporting) {
@@ -296,6 +295,13 @@ var player = {
 		return tile_id - 1; //-1 because tiles actually start from 0
 	},
 	
+	getTileCoords: function() {
+		return {
+			x: Math.round(player.coords.x / World.map.tileset.tilewidth),
+			y: Math.round(player.coords.y / World.map.tileset.tileheight)
+		};
+	},
+	
 	collideWithGeometry: function(o) {
 		if(player.movement_state == 'idle') {
 			//not moving, obviously not going to collide (edit: unless falling into something)
@@ -480,75 +486,21 @@ var player = {
 	},
 	
 	collideWithTeleporters: function(o) {
-		if(player.movement_state == 'idle') {
-			//not moving, obviously not going to collide (edit: unless falling into something)
-			//return false;
-		}
+		var colliding = false;
+		var player_tile_coords = player.getTileCoords();
 		if(
-			typeof World.map.teleporters == 'undefined' || !World.map.teleporters.length()
+			typeof World.map.teleporters != 'undefined' &&
+			typeof World.map.teleporters[player_tile_coords.y] != 'undefined' &&
+			typeof World.map.teleporters[player_tile_coords.y][player_tile_coords.x] != 'undefined'
 		) {
-			//no teleporters in the map
+			//we are in a teleporter
+			colliding = true;
+		}
+		if(colliding) {
+			return World.map.teleporters[player_tile_coords.y][player_tile_coords.x];
+		} else {
 			return false;
 		}
-		//TODO: find a more efficient way to place the teleporters. looping through the entire map to find the coords is very slow since we only have a few teleporters around the map
-		for(var layer=0; layer<World.map.layers.length; layer++) {
-			if( true ) {
-				//only scan for collisions near the player
-				var view_range = player.getCollisionRange();
-				for(var y=view_range.top; y<view_range.bottom; y++) {
-					//any better way to handle this?
-					if(y<0) {continue;} //too much margin, skip this inexistent row
-					else if(y>World.size.y) break; //reached the bottom, stop everything
-					var row = World.map.layers[layer].data[y];
-					for(var x=view_range.left; x<view_range.right; x++) {
-						if(x<0) {continue;} //too much margin, skip this inexistent tile
-						else if(x>World.size.x) break; //reached the farthest, next row
-						//if getting x then ignore tiles above and below
-						if(
-							(typeof o != 'undefined' && o.dir == 'x') &&
-							(y >= ( player.coords.y / World.map.tileset.tileheight ) || y > ( player.coords.y / World.map.tileset.tileheight ))
-						) {
-							continue;
-						}
-						//why row becomes undefined???
-						if(typeof row == 'undefined') {
-							continue;
-						}
-						if(typeof World.map.teleporters[y] == 'undefined' || typeof World.map.teleporters[y][x] == 'undefined') {
-							//no teleporter in this tile
-							continue;
-						}
-						var next_step = $.parseJSON(JSON.stringify(player.coords));
-						if(!player.on_ground && player.movement_state == 'ascending') {
-							next_step.y = next_step.y + player.velocity.y;
-						} else if(!player.on_ground && player.movement_state == 'descending') {
-							next_step.y = next_step.y + player.velocity.y;
-						} else if(typeof o != 'undefined' && o.dir == 'y') {
-							next_step.y = next_step.y + player.velocity.y+1;
-						}
-						if(inputManager.key_a) {
-							next_step.x = next_step.x - player.speed;
-						} else if(inputManager.key_d) {
-							next_step.x = next_step.x + player.speed;
-						}
-						colliding = CollisionDetection.isColliding([
-							{x:next_step.x, y:next_step.y, z:player.image.height, w:player.image.width},
-							//tile
-							{
-								x: World.map.tileset.tilewidth * x, y: (World.map.tileset.tileheight * y),
-								z: World.map.tileset.tileheight, w: World.map.tileset.tileheight
-							}
-						], true); //render? true or false
-						if(colliding) {
-							return World.map.teleporters[y][x];
-						} else {
-							return false;
-						}
-					}
-				}
-			}
-		}
-		return false;
 	},
 	
 	collideWithClimbables: function(o) {
