@@ -1,5 +1,6 @@
 var Objects = {
 	"scene": {
+		//"teleporter": { "image": {"w":32, "h":64}, "animations": {"idle": {"x":0, "y":0, "frames":8, "speed":2}} },
 		"water_grass_fields": { "image": {"w":32, "h":32}, "animations": {"idle": {"x":0, "y":0, "frames":8, "speed":2}} },
 		"water_jungle": { "image": {"w":32, "h":32}, "animations": {"idle": {"x":0, "y":0, "frames":8, "speed":2}} },
 	},

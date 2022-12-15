@@ -14,7 +14,7 @@ var World = {
 		//this.size.x = hud.canvas_parent.width / 32; //pixels
 		this.size.x = 100; //tiles
 		this.size.y = hud.canvas_parent.height / 32; //pixels
-		
+		World.teleporter_image = System.loadImage({path: "image/spritesheets/teleporter_1.png"});
 		this.loadMap({"biome":this.starting_biome, "map":this.starting_map});
 	},
 	loadMap: function(o) {
@@ -32,7 +32,6 @@ var World = {
 				}				
 				World.map = m;
 				World.map.tileset.image = System.loadImage({path: m.tileset.image_path});
-				//World.map.tileset.spritesheet_image = System.loadImage({path: m.tileset.spritesheet_path});
 				//spawn any initial objects
 				if(typeof World.map.spawn_objects != 'undefined') {
 					for(var i=0; i<World.map.spawn_objects.length; i++) {
@@ -96,7 +95,7 @@ var World = {
 			}
 		}
 		//draw objects
-		//World.drawTeleporters();
+		World.drawTeleporters();
 		World.drawObjects();
 		if(typeof World.map.seasons != 'undefined') {
 			World.updateSeasonColors();
@@ -159,6 +158,8 @@ var World = {
 		}
 	},
 	drawTeleporters: function() {
+		var animation_speed = 2;
+		var animation_frames = 6;
 		var view_range = Camera.getViewRange({type:'tile'}); //objects can be placed at pixel precision. not constrained to tiles
 		for(const y in World.map.teleporters) {
 			for(const x in World.map.teleporters[y]) {
@@ -171,75 +172,35 @@ var World = {
 				) {
 					continue;
 				}
-				//console.log(World.map.teleporters[y][x]['name']);
-				//draw
-				/*//using single image per object
 				hud.canvas.drawImage(
-					World.data[object_type][object].image,
-					this_object.coords.x,
-					this_object.coords.y
-				);*/
-				
-				if(typeof object.animation == 'undefined') {
-					//static non-animated sprite
+					//image
+					World.teleporter_image,
 					
-					//console.log(y * World.map.tileset.tileheight);
+					//source coords
+					32 * object.animation.frame,
+					0,
 					
-					hud.canvas.drawImage(
-						//image
-						World.map.tileset.spritesheet_image,
-						//source coords
-						//duno why, in normal draw layers thing we need to do tile_width-1 but here we dont need the -1
-						((object.tile_id) % (World.map.tileset.spritesheet_width / World.map.tileset.tilewidth)) * World.map.tileset.tilewidth, //sx,
-						~~((object.tile_id) / (World.map.tileset.spritesheet_width / World.map.tileset.tileheight)) * World.map.tileset.tileheight, //sy,
-						//source size
-						World.map.tileset.tilewidth,
-						World.map.tileset.tileheight,
-						//destination coords
-						x * World.map.tileset.tilewidth,
-						y * World.map.tileset.tileheight,
-						//destination size
-						World.map.tileset.tilewidth,
-						World.map.tileset.tileheight
-					);
+					//source size
+					32,
+					64,
+					
+					//destination coords
+					x * World.map.tileset.tilewidth,
+					y * World.map.tileset.tileheight - 32,
+					
+					//destination size
+					World.map.tileset.tilewidth,
+					( typeof object.size != 'undefined' ? object.size.height * World.map.tileset.tileheight : World.map.tileset.tileheight), //this sprite has a custom size?
+				);
+				//update animation
+				if(object.animation.frames_passed > animation_speed) {
+					if(object.animation.frame < animation_frames - 1) object.animation.frame++;
+					else object.animation.frame = 0;
+					object.animation.frames_passed = 0;
 				} else {
-					//animated sprite
-					hud.canvas.drawImage(
-						//image
-						World.map.tileset.spritesheet_image,
-						
-						//source coords
-						//duno why, in normal draw layers thing we need to do tile_width-1 but here we dont need the -1
-						(
-							object.animation.frames > 1 ? (object.animation.x*World.map.tileset.tilewidth) + (World.map.tileset.tilewidth * object.animation.frame) :
-							object.animation.x * World.map.tileset.tilewidth
-						),
-						World.map.tileset.tileheight * object.animation.y,
-						
-						//source size
-						World.map.tileset.tilewidth,
-						( typeof object.size != 'undefined' ? object.size.height * World.map.tileset.tileheight : World.map.tileset.tileheight), //this sprite has a custom size?
-						
-						//destination coords
-						x * World.map.tileset.tilewidth,
-						//duno why, the teleporter is not exactly where expect it to be...
-						//( typeof object.size != 'undefined' ? (y * World.map.tileset.tileheight) - (object.size.height * World.map.tileset.tileheight) : y * World.map.tileset.tileheight), //this sprite has a custom size?
-						( typeof object.size != 'undefined' ? (y * World.map.tileset.tileheight) - ((object.size.height-1) * World.map.tileset.tileheight) : y * World.map.tileset.tileheight), //this sprite has a custom size?
-						
-						//destination size
-						World.map.tileset.tilewidth,
-						( typeof object.size != 'undefined' ? object.size.height * World.map.tileset.tileheight : World.map.tileset.tileheight), //this sprite has a custom size?
-						
-					);
-					//update animation
-					if(object.animation.frames_passed > object.animation.speed) {
-						if(object.animation.frame < object.animation.frames - 1) object.animation.frame++;
-						else object.animation.frame = 0;
-						object.animation.frames_passed = 0;
-					} else {
-						object.animation.frames_passed++;
-					}
+					object.animation.frames_passed++;
 				}
+				
 			}
 		}
 	},

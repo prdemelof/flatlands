@@ -28,21 +28,21 @@
 				"to_biome": "snow",
 				"to_map": "snow_1",
 				"to_coords": {"x":59, "y":18},
-				"size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0}
+				"size": {"width":1, "height":2}, "animation": {"frame": 0, "frames_passed": 0}
 			},
 			"68": {
 				"name": "to desert_1",
 				"to_biome": "desert",
 				"to_map": "desert_1",
 				"to_coords": {"x":59, "y":18},
-				"size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0}
+				"size": {"width":1, "height":2}, "animation": {"frame": 0, "frames_passed": 0}
 			},
 			"71": {
 				"name": "to jungle_1",
 				"to_biome": "jungle",
 				"to_map": "jungle_1",
 				"to_coords": {"x":59, "y":18},
-				"size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0}
+				"size": {"width":1, "height":2}, "animation": {"frame": 0, "frames_passed": 0}
 			}
 		},
 		
@@ -52,7 +52,7 @@
 				"to_biome": "grass_fields",
 				"to_map": "grass_fields_1",
 				"to_coords": {"x":77, "y":4},
-				"size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0}
+				"size": {"width":1, "height":2}, "animation": {"frame": 0, "frames_passed": 0}
 			}
 		},
 		"4": {
@@ -61,7 +61,7 @@
 				"to_biome": "grass_fields",
 				"to_map": "grass_fields_1",
 				"to_coords": {"x":37, "y":18},
-				"size": {"width":1, "height":2}, "animation": {"x":4, "y":6, "frames":6, "speed":2, "frame": 0, "frames_passed": 0}
+				"size": {"width":1, "height":2}, "animation": {"frame": 0, "frames_passed": 0}
 			}
 		}
 	},
