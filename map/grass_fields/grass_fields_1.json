@@ -14,15 +14,12 @@
 			"collidable": true
 		}
 	],
-	"objects": {
-		"opacity": 1,
-		"visible": true,
-		"data": [
-			{ "name":"water1", "coords": {"x": 416, "y": 736}, "animation": {"x":0, "y":8, "frames":8, "speed":2, "frame": 0, "frames_passed": 0} },
-			{ "name":"water2", "coords": {"x": 448, "y": 736}, "animation": {"x":0, "y":8, "frames":8, "speed":2, "frame": 0, "frames_passed": 0} },
-			{ "name":"water3", "coords": {"x": 480, "y": 736}, "animation": {"x":0, "y":8, "frames":8, "speed":2, "frame": 0, "frames_passed": 0} }
-		]
-	},
+	"spawn_objects": [
+		{"type":"scene", "id":"water_grass_fields", "count":1, "coords":{"x":416,"y":704} },
+		{"type":"scene", "id":"water_grass_fields", "count":1, "coords":{"x":448,"y":704} },
+		{"type":"scene", "id":"water_grass_fields", "count":1, "coords":{"x":480,"y":704} }
+	],
+	"objects": [],
 	"teleporters": {
 		
 		"3": {

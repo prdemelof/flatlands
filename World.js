@@ -1,4 +1,3 @@
-var world_image_path = 'image/objects/';
 
 var World = {
 	map: null,
@@ -33,7 +32,13 @@ var World = {
 				}				
 				World.map = m;
 				World.map.tileset.image = System.loadImage({path: m.tileset.image_path});
-				World.map.tileset.spritesheet_image = System.loadImage({path: m.tileset.spritesheet_path});
+				//World.map.tileset.spritesheet_image = System.loadImage({path: m.tileset.spritesheet_path});
+				//spawn any initial objects
+				if(typeof World.map.spawn_objects != 'undefined') {
+					for(var i=0; i<World.map.spawn_objects.length; i++) {
+						World.spawnObject({"ignore_pause":true, "type":World.map.spawn_objects[i].type, "object_id":World.map.spawn_objects[i].id, "count":World.map.spawn_objects[i].count, "coords":World.map.spawn_objects[i].coords });
+					}
+				}
 			}
 		});
 	},
@@ -63,19 +68,22 @@ var World = {
 		
 		//TODO: handle the case where the object may or may not have an animation. its either "animation" or "tile_id"
 		
-		if( !config.paused ) {
+		if( !config.paused || (typeof o.ignore_pause != 'undefined' && o.ignore_pause) ) {
 			var new_object = structuredClone(Objects[o.type][o.object_id]);
 			//set important variables, such as this object's ID and it's image source
 			new_object.coords = { "x": spawn_coords.x, "y": spawn_coords.y };
 			new_object.id = o.object_id;
-			new_object.image.file = new Image();
-			new_object.image.file.src = "objects/"+o.type+"/"+o.object_id+"/"+o.object_id+".png";
-			//put this object into the main map objects array
-			if(typeof World.map.objects.data[o.type] == 'undefined') {
-				World.map.objects.data[o.type] = [];
+			if(typeof new_object.animations != 'undefined') {
+				new_object.animation = {"frame":0, "frames_passed":0};
 			}
-			World.map.objects.data[o.type].push(new_object);
-			
+			new_object.image.file = new Image();
+			//new_object.image.file.src = "objects/"+o.type+"/"+o.object_id+"/"+o.object_id+".png";
+			new_object.image.file.src = "image/spritesheets/"+o.type+"/"+o.object_id+".png";
+			//put this object into the main map objects array
+			if(typeof World.map.objects[o.type] == 'undefined') {
+				World.map.objects[o.type] = [];
+			}
+			World.map.objects[o.type].push(new_object);
 		}
 	},
 	draw: function() {
@@ -88,7 +96,7 @@ var World = {
 			}
 		}
 		//draw objects
-		World.drawTeleporters();
+		//World.drawTeleporters();
 		World.drawObjects();
 		if(typeof World.map.seasons != 'undefined') {
 			World.updateSeasonColors();
@@ -96,9 +104,9 @@ var World = {
 	},
 	drawObjects: function() {
 		var view_range = Camera.getViewRange({type:'pixel'}); //objects can be placed at pixel precision. not constrained to tiles
-		for(const type in World.map.objects.data) {
-			for(var object_i=0; object_i<World.map.objects.data[type].length; object_i++) {
-				var object = World.map.objects.data[type][object_i];
+		for(const type in World.map.objects) {
+			for(var object_i=0; object_i<World.map.objects[type].length; object_i++) {
+				var object = World.map.objects[type][object_i];
 				//we loop through every object and filter out those outside of the screen
 				if(
 					object.coords.y < view_range.top - (World.draw_margin.top * World.map.tileset.tileheight) ||
