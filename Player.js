@@ -66,9 +66,11 @@ var player = {
 					//reset the player
 					//player.on_ground = true;
 					//player.movement_state = 'idle';
-					player.coords.x = teleporting.to_coords.x;
-					player.coords.y = teleporting.to_coords.y;
 					World.loadMap({"biome":teleporting.to_biome, "map":teleporting.to_map});
+					//player.coords.x = teleporting.to_coords.x;
+					//player.coords.y = teleporting.to_coords.y;
+					player.coords.x = teleporting.to_coords.x * World.map.tileset.tilewidth;
+					player.coords.y = teleporting.to_coords.y * World.map.tileset.tileheight;
 					Camera.centerOnPlayer();
 					setTimeout(function() {
 						config.unpause();
