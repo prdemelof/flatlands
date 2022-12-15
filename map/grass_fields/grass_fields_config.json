@@ -2,11 +2,9 @@
 	"name": "grass_fields",
 	"tileheight": 32,
 	"tilewidth": 32,
-	"image_path": "image\/tilesheets\/grass_fields_1_tilesheet.png",
+	"image_path": "image/tilesheets/grass_fields_1_tilesheet.png",
 	"imagewidth": 1024,
 	"imageheight": 768,
-	"spritesheet_width": 384,
-	"spritesheet_height": 352,
 	
 	"climbables": [
 		31, 63, 95,

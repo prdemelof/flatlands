@@ -41,14 +41,15 @@ function render() {
 	
 	
 	<div style="position: fixed; top: 0; left: 0;cursor:pointer; font-size:12px;text-align: center; color: white;background-color: rgba(255,255,255,.2);">
-		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="heart_1">heart</div>
-		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="coin_1">coin</div>
-		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="honey_1">honey</div>
-		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="key_1">key</div>
-		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="mush_1">mushroom 1</div>
-		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="mush_2">mushroom 2</div>
-		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="mush_3">mushroom 3</div>
-		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-item-id="mush_4">mushroom 4</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="heart_1">heart</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="coin_1">coin</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="honey_1">honey</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="key_1">key</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="mush_1">mushroom 1</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="mush_2">mushroom 2</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="mush_3">mushroom 3</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="mush_4">mushroom 4</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="mob" data-item-id="mushroom_4">mob 1</div>
 	</div>
 	<div style="position: fixed; top: 25px; left: 0;cursor:pointer; font-size:12px;text-align: center; color: white;background-color: rgba(255,255,255,.2);">
 		<div class="set_season" style=" padding: 3px 3px;  border: 1px solid white;" data-season="spring">spring</div>
@@ -120,7 +121,7 @@ $('.set_season').click(function() {
 	World.setSeason($(this).attr('data-season'));
 });
 $('.spawner').click(function() {
-	World.spawnObject({"type":"item", "object_id":$(this).attr('data-item-id'), "count":1, "coords": { "x":( player.dir == 'left' ? player.coords.x-32 : player.coords.x+32 ), "y": player.coords.y } });
+	World.spawnObject({"type":$(this).attr('data-type'), "object_id":$(this).attr('data-item-id'), "count":1, "coords": { "x":( player.dir == 'left' ? player.coords.x-32 : player.coords.x+32 ), "y": player.coords.y } });
 });
 /*
 { "name":"coin", "coords": {"x": 1808, "y": 640}, "animation": {"x":0, "y":0, "frames":12, "speed":2, "frame": 0, "frames_passed": 0} },
@@ -176,6 +177,11 @@ World.init();
 player.coords.x = World.size.x*32 - ( (World.size.x*32) / 2) - 16;
 //config.player_start_coords.y = $('#canvas_parent').height() - ( 1 / 6 * window.innerHeight ) - 32;
 Camera.offset.x = -player.coords.x + (hud.canvas_parent.width/2) - 16;
+
+//fix for scaled images
+hud.canvas.mozImageSmoothingEnabled = false;
+hud.canvas.webkitImageSmoothingEnabled = false;
+hud.canvas.imageSmoothingEnabled = false;
 
 hud.toggleStartMenu();
 

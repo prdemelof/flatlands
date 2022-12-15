@@ -122,6 +122,7 @@ var World = {
 					//animated sprite
 					//find this sprite state
 					var state = 'idle'; //only really needed for mobs and stuff that move
+					
 					hud.canvas.drawImage(
 						//image
 						object.image.file,
@@ -143,9 +144,10 @@ var World = {
 						object.coords.y,
 						
 						//destination size
-						object.image.w,
-						object.image.h
+						(typeof object.scale != 'undefined' ? object.image.w * object.scale : object.image.w),
+						(typeof object.scale != 'undefined' ? object.image.h * object.scale : object.image.h)
 					);
+					
 					if(object.animation.frames_passed > object.animations[state].speed) {
 						if(object.animation.frame < object.animations[state].frames - 1) object.animation.frame++;
 						else object.animation.frame = 0;

@@ -11,13 +11,13 @@ var Objects = {
 		"mushroom_4": { "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
 	},
 	"item": {
-		"coin_1": { "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":12, "speed":2}} },
-		"honey_1": { "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
-		"heart_1": { "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
-		"key_1": { "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
-		"mush_1": { "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
-		"mush_2": { "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
-		"mush_3": { "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
-		"mush_4": { "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} }
+		"coin_1": { "scale":2, "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":12, "speed":2}} },
+		"honey_1": { "scale":2, "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
+		"heart_1": { "scale":2, "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
+		"key_1": { "scale":2, "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
+		"mush_1": { "scale":2, "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
+		"mush_2": { "scale":2, "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
+		"mush_3": { "scale":2, "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
+		"mush_4": { "scale":2, "image": {"w":16, "h":16}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} }
 	}
 };
