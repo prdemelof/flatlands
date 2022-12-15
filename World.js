@@ -41,7 +41,7 @@ var World = {
 		World.season = season;
 	},
 	spawnObject: function(o) {
-		//example: World.spawnObject({"object_id":"heart_1", "count":1, "coords": {"x":1248, "y": 650} });
+		//example: World.spawnObject({"type":"item", "object_id":"heart_1", "count":1, "coords": {"x":1248, "y": 650} });
 		var spawn_coords;
 		if(typeof o.coords == 'undefined') {
 			//spawning under the mouse cursor
@@ -64,13 +64,7 @@ var World = {
 		//TODO: handle the case where the object may or may not have an animation. its either "animation" or "tile_id"
 		
 		if( !config.paused ) {
-			//console.log('spawning: '+ o.object_id +' x'+ o.count +' at '+ spawn_coords.x +' - '+ spawn_coords.y);
-			//var object = {
-			//	"object_id": o.object_id,
-			//	"coords": { "x": spawn_coords.x, "y": spawn_coords.y },
-			//	"animation": {"x":0, "y":2, "frames":4, "speed":2, "frame": 0, "frames_passed": 0}
-			//};
-			var new_object = structuredClone(Items[o.object_id]);
+			var new_object = structuredClone(Objects[o.type][o.object_id]);
 			new_object.coords = { "x": spawn_coords.x, "y": spawn_coords.y };
 			World.map.objects.data.push(new_object);
 		}
@@ -124,17 +118,6 @@ var World = {
 				this_object.coords.x,
 				this_object.coords.y
 			);*/
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			
 			if(typeof object.animation == 'undefined') {
 				//static non-animated sprite

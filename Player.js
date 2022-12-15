@@ -2,7 +2,7 @@
 var player = {
 	name: "player",
 	image: {
-		width:32, height:32, left_file: new Image(), right_file: new Image(),
+		width:32, height:32, sprite_sheet: new Image(),
 		animation: {
 			frame: 0,
 			frames_passed: 0,
@@ -211,16 +211,11 @@ var player = {
 		}
 		
 		//render the player
-		//hud.canvas.drawImage(player.image, player.coords.x, player.coords.y);
 		//flip the image if moving left
-		if(player.dir == 'left') {
-			var player_image_file = player.image.left_file;
-		} else if (player.dir == 'up') {
-			var player_image_file = player.image.right_file;
-		} else {
-			var player_image_file = player.image.right_file;
-		}
-		
+		var player_image_file = player.image.sprite_sheet;
+		var flip = (player.dir == 'left');
+		hud.canvas.save();
+		hud.canvas.scale(flip ? -1 : 1, 1);
 		hud.canvas.drawImage(
 			player_image_file,
 			(
@@ -230,11 +225,12 @@ var player = {
 			player.image.height * animation.y,
 			player.image.width,
 			player.image.height,
-			player.coords.x,
+			(flip ? (32 * -1)-player.coords.x : 0+player.coords.x), //flip or no flip
 			player.coords.y,
 			player.image.width,
 			player.image.height,
 		);
+		hud.canvas.restore();
 		
 		if(player.image.animation.frames_passed > animation.speed) {
 			if(player.image.animation.frame < animation.frames - 1) player.image.animation.frame++;
@@ -520,5 +516,4 @@ var player = {
 };
 
 //player.image.file.src = "image/player.png";
-player.image.right_file.src = "image/player/player_right.png";
-player.image.left_file.src = "image/player/player_left.png";
+player.image.sprite_sheet.src = "image/player/player_sprite_sheet.png";

@@ -2,7 +2,7 @@
 useful js
 
 spawn item
-World.spawnObject({"object_id":"heart_1", "count":1, "coords": {"x":1248, "y": 650} });
+World.spawnObject({"type":"item", "object_id":"heart_1", "count":1, "coords": {"x":1248, "y": 650} });
 
 loop through tiles
 for(var x=0; x<map_1.length; x++) { for(var y=0; y<map_1[x].length; y++) { console.log('x: '+x+' y: '+y+' name: '+name); } }
@@ -119,8 +119,7 @@ $('.set_season').click(function() {
 	World.setSeason($(this).attr('data-season'));
 });
 $('.spawner').click(function() {
-	//World.spawnObject({"object_id":"heart_1", "count":1, "coords": {"x":1248, "y": 650} });
-	World.spawnObject({"object_id":$(this).attr('data-item-id'), "count":1, "coords": { "x":( player.dir == 'left' ? player.coords.x-32 : player.coords.x+32 ), "y": player.coords.y } });
+	World.spawnObject({"type":"item", "object_id":$(this).attr('data-item-id'), "count":1, "coords": { "x":( player.dir == 'left' ? player.coords.x-32 : player.coords.x+32 ), "y": player.coords.y } });
 });
 /*
 { "name":"coin", "coords": {"x": 1808, "y": 640}, "animation": {"x":0, "y":0, "frames":12, "speed":2, "frame": 0, "frames_passed": 0} },
@@ -154,7 +153,7 @@ config.player_start_coords = {
 };
 </script>
 
-<script src="Items.js"></script>
+<script src="Objects.js"></script>
 <script src="system/helpers.js"></script>
 <script src="System.js"></script>
 <script src="CollisionDetection.js"></script>
