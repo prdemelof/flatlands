@@ -225,7 +225,7 @@ var player = {
 			player.image.height * animation.y,
 			player.image.width,
 			player.image.height,
-			(flip ? (32 * -1)-player.coords.x : 0+player.coords.x), //flip or no flip
+			(flip ? (player.image.width * -1)-player.coords.x : 0+player.coords.x), //flip or no flip
 			player.coords.y,
 			player.image.width,
 			player.image.height,
