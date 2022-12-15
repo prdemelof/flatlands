@@ -1,0 +1,138 @@
+{
+	"name": "grass_fields",
+	"tileheight": 32,
+	"tilewidth": 32,
+	"image_path": "image\/tilesheets\/grass_fields_1_tilesheet.png",
+	"imagewidth": 1024,
+	"imageheight": 768,
+	"spritesheet_path": "image\/spritesheets\/grass_fields_1_spritesheet.png",
+	"spritesheet_width": 384,
+	"spritesheet_height": 352,
+	
+	"climbables": [
+		31, 63, 95,
+		126, 222, 223,
+		127, 190, 191
+	],
+	
+	"colliders": {
+		"0": { "height": 16, "width": 29 },
+		"1": { "height": 16, "width": 29 },
+		"2": { "height": 16, "width": 29 },
+		"3": { "height": 16, "width": 29 },
+		"4": { "height": 16, "width": 29 },
+		"5": { "height": 16, "width": 29 },
+		"6": { "height": 16, "width": 29 },
+		"7": { "height": 16, "width": 29 },
+		
+		"32": { "height": 16, "width": 29 },
+		"33": { "height": 16, "width": 29 },
+		"34": { "height": 16, "width": 29 },
+		"35": { "height": 16, "width": 29 },
+		"36": { "height": 16, "width": 29 },
+		"37": { "height": 16, "width": 29 },
+		"38": { "height": 16, "width": 29 },
+		"39": { "height": 16, "width": 29 },
+		
+		"64": { "height": 16, "width": 29 },
+		"65": { "height": 16, "width": 29 },
+		"66": { "height": 16, "width": 29 },
+		"67": { "height": 16, "width": 29 },
+		"68": { "height": 16, "width": 29 },
+		"69": { "height": 16, "width": 29 },
+		"70": { "height": 16, "width": 29 },
+		"71": { "height": 16, "width": 29 },
+		
+		"96": { "height": 16, "width": 29 },
+		"97": { "height": 16, "width": 29 },
+		"98": { "height": 16, "width": 29 },
+		"99": { "height": 16, "width": 29 },
+		"100": { "height": 16, "width": 29 },
+		"101": { "height": 16, "width": 29 },
+		"102": { "height": 16, "width": 29 },
+		"103": { "height": 16, "width": 29 },
+		
+		"128": { "height": 16, "width": 29 },
+		"129": { "height": 16, "width": 29 },
+		"130": { "height": 16, "width": 29 },
+		"131": { "height": 16, "width": 29 },
+		"132": { "height": 16, "width": 29 },
+		"133": { "height": 16, "width": 29 },
+		"134": { "height": 16, "width": 29 },
+		"135": { "height": 16, "width": 29 },
+		
+		"160": { "height": 16, "width": 29 },
+		"161": { "height": 16, "width": 29 },
+		"162": { "height": 16, "width": 29 },
+		"163": { "height": 16, "width": 29 },
+		"164": { "height": 16, "width": 29 },
+		"165": { "height": 16, "width": 29 },
+		"166": { "height": 16, "width": 29 },
+		"167": { "height": 16, "width": 29 },
+		
+		"192": { "height": 16, "width": 29 },
+		"193": { "height": 16, "width": 29 },
+		"194": { "height": 16, "width": 29 },
+		"195": { "height": 16, "width": 29 },
+		"196": { "height": 16, "width": 29 },
+		"197": { "height": 16, "width": 29 },
+		"198": { "height": 16, "width": 29 },
+		"199": { "height": 16, "width": 29 },
+		
+		"224": { "height": 16, "width": 29 },
+		"225": { "height": 16, "width": 29 },
+		"226": { "height": 16, "width": 29 },
+		"227": { "height": 16, "width": 29 },
+		"228": { "height": 16, "width": 29 },
+		"229": { "height": 16, "width": 29 },
+		"230": { "height": 16, "width": 29 },
+		"231": { "height": 16, "width": 29 },
+		
+		"12": { "height": 16, "width": 29 },
+		"76": { "height": 16, "width": 29 },
+		"140": { "height": 16, "width": 29 },
+		"204": { "height": 16, "width": 29 },
+		
+		"21": { "height": 16, "width": 29 },
+		"22": { "height": 16, "width": 29 },
+		"23": { "height": 16, "width": 29 },
+		"24": { "height": 16, "width": 29 },
+		"25": { "height": 16, "width": 29 },
+		"26": { "height": 16, "width": 29 },
+		"27": { "height": 16, "width": 29 },
+		
+		"53": { "height": 16, "width": 29 },
+		"54": { "height": 16, "width": 29 },
+		"55": { "height": 16, "width": 29 },
+		"56": { "height": 16, "width": 29 },
+		"57": { "height": 16, "width": 29 },
+		"58": { "height": 16, "width": 29 },
+		"59": { "height": 16, "width": 29 },
+		
+		"85": { "height": 16, "width": 29 },
+		"86": { "height": 16, "width": 29 },
+		"87": { "height": 16, "width": 29 },
+		"88": { "height": 16, "width": 29 },
+		"89": { "height": 16, "width": 29 },
+		"90": { "height": 16, "width": 29 },
+		"91": { "height": 16, "width": 29 },
+		
+		"117": { "height": 16, "width": 29 },
+		"118": { "height": 16, "width": 29 },
+		"119": { "height": 16, "width": 29 },
+		"120": { "height": 16, "width": 29 },
+		"121": { "height": 16, "width": 29 },
+		"122": { "height": 16, "width": 29 },
+		"123": { "height": 16, "width": 29 },
+		
+		"29": { "height": 16, "width": 29 },
+		"30": { "height": 16, "width": 29 },
+		"62": { "height": 16, "width": 29 },
+		"94": { "height": 16, "width": 29 }
+		
+		
+		
+		
+	}
+	
+}

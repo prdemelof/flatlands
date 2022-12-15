@@ -87,7 +87,9 @@ var World = {
 		//draw objects
 		World.drawTeleporters();
 		World.drawObjects();
-		World.updateSeasonColors();
+		if(typeof World.map.seasons != 'undefined') {
+			World.updateSeasonColors();
+		}
 	},
 	drawObjects: function() {
 		var view_range = Camera.getViewRange({type:'pixel'}); //objects can be placed at pixel precision. not constrained to tiles
@@ -102,7 +104,7 @@ var World = {
 			) {
 				continue;
 			}
-			if(typeof object.move != 'undefined') {
+			/*if(typeof object.move != 'undefined') {
 				//todo: find a way to specify whether the y position should be random or not
 				//todo: find a way to specify whether the item should re-spawn when out of bounds and where to respawn
 				if(object.direction == 'right') var new_x = object.coords.x + object.speed;
@@ -114,7 +116,7 @@ var World = {
 					object.coords.y = 60 + Math.floor(Math.random() * 150);
 				}
 				object.coords.x = new_x;
-			}
+			}*/
 			//draw
 			/*//using single image per object
 			hud.canvas.drawImage(
@@ -122,6 +124,18 @@ var World = {
 				this_object.coords.x,
 				this_object.coords.y
 			);*/
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			if(typeof object.animation == 'undefined') {
 				//static non-animated sprite
 				hud.canvas.drawImage(
@@ -143,6 +157,7 @@ var World = {
 				);
 			} else {
 				//animated sprite
+				
 				hud.canvas.drawImage(
 					//image
 					World.map.tileset.spritesheet_image,
@@ -157,14 +172,15 @@ var World = {
 					
 					//source size
 					World.map.tileset.tilewidth,
-					( typeof object.size != 'undefined' ? object.size.height * World.map.tileset.tileheight : World.map.tileset.tileheight), //this sprite has a custom size?
+					( typeof object.size != 'undefined' ? object.size.height * World.map.tileset.tileheight : World.map.tileset.tileheight),
 					
 					//destination coords
 					object.coords.x, //pixel precision
-					( typeof object.size != 'undefined' ? object.coords.y - (object.size.height * World.map.tileset.tileheight) : object.coords.y),
+					( typeof object.size != 'undefined' ? object.coords.y - (object.size.height * World.map.tileset.tileheight) : object.coords.y) - World.map.tileset.tileheight,
+					
 					//destination size
 					World.map.tileset.tilewidth,
-					( typeof object.size != 'undefined' ? object.size.height * World.map.tileset.tileheight : World.map.tileset.tileheight), //this sprite has a custom size?
+					( typeof object.size != 'undefined' ? object.size.height * World.map.tileset.tileheight : World.map.tileset.tileheight),
 					
 				);
 				if(object.animation.frames_passed > object.animation.speed) {

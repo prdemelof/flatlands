@@ -1,0 +1,22 @@
+{ "columns":32,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"",
+         "target":"."
+        }
+    },
+ "image":"..\/..\/..\/image\/tilesheets\/grass_fields_1_tilesheet.png",
+ "imageheight":768,
+ "imagewidth":1024,
+ "margin":0,
+ "name":"grass_fields_config",
+ "spacing":0,
+ "tilecount":768,
+ "tiledversion":"1.4.2",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.4
+}
