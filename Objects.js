@@ -1,8 +1,9 @@
 var Objects = {
 	"mob": {
-		"mushroom_1": {
-			"animation": {"frames":4, "speed":2, "frame": 0, "frames_passed": 0}
-		},
+		"mushroom_1": { "name":"Mushroom 1", "image": {"w":16, "h":16}, "animation":{"frame": 0, "frames_passed": 0}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
+		"mushroom_2": { "name":"Mushroom 2", "image": {"w":16, "h":16}, "animation":{"frame": 0, "frames_passed": 0}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
+		"mushroom_3": { "name":"Mushroom 3", "image": {"w":16, "h":16}, "animation":{"frame": 0, "frames_passed": 0}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
+		"mushroom_4": { "name":"Mushroom 4", "image": {"w":16, "h":16}, "animation":{"frame": 0, "frames_passed": 0}, "animations": {"idle": {"x":0, "y":0, "frames":4, "speed":2}} },
 	},
 	"item": {
 		"coin_1": {

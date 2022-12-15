@@ -65,8 +65,17 @@ var World = {
 		
 		if( !config.paused ) {
 			var new_object = structuredClone(Objects[o.type][o.object_id]);
+			//set important variables, such as this object's ID and it's image source
 			new_object.coords = { "x": spawn_coords.x, "y": spawn_coords.y };
-			World.map.objects.data.push(new_object);
+			new_object.id = o.object_id;
+			new_object.image.file = new Image();
+			new_object.image.file.src = "objects/"+o.type+"/"+o.object_id+"/"+o.object_id+".png";
+			//put this object into the main map objects array
+			if(typeof World.map.objects.data[o.type] == 'undefined') {
+				World.map.objects.data[o.type] = [];
+			}
+			World.map.objects.data[o.type].push(new_object);
+			
 		}
 	},
 	draw: function() {
@@ -87,91 +96,56 @@ var World = {
 	},
 	drawObjects: function() {
 		var view_range = Camera.getViewRange({type:'pixel'}); //objects can be placed at pixel precision. not constrained to tiles
-		for(var object_i=0; object_i<World.map.objects.data.length; object_i++) {
-			var object = World.map.objects.data[object_i];
-			//we loop through every object and filter out those outside of the screen
-			if(
-				object.coords.y < view_range.top - (World.draw_margin.top * World.map.tileset.tileheight) ||
-				object.coords.y > view_range.bottom + (World.draw_margin.bottom * World.map.tileset.tileheight) ||
-				object.coords.x < view_range.left - (World.draw_margin.left * World.map.tileset.tilewidth) ||
-				object.coords.x > view_range.right + (World.draw_margin.right * World.map.tileset.tilewidth)
-			) {
-				continue;
-			}
-			/*if(typeof object.move != 'undefined') {
-				//todo: find a way to specify whether the y position should be random or not
-				//todo: find a way to specify whether the item should re-spawn when out of bounds and where to respawn
-				if(object.direction == 'right') var new_x = object.coords.x + object.speed;
-				else var new_x = object.coords.x - object.speed;
-				if(new_x > World.size.x * 32) {
-					//spawn back on the left
-					new_x = 0 - World.objects[object_type][object].image.width;
-					//randomize the y position
-					object.coords.y = 60 + Math.floor(Math.random() * 150);
+		for(const type in World.map.objects.data) {
+			for(var object_i=0; object_i<World.map.objects.data[type].length; object_i++) {
+				var object = World.map.objects.data[type][object_i];
+				//we loop through every object and filter out those outside of the screen
+				if(
+					object.coords.y < view_range.top - (World.draw_margin.top * World.map.tileset.tileheight) ||
+					object.coords.y > view_range.bottom + (World.draw_margin.bottom * World.map.tileset.tileheight) ||
+					object.coords.x < view_range.left - (World.draw_margin.left * World.map.tileset.tilewidth) ||
+					object.coords.x > view_range.right + (World.draw_margin.right * World.map.tileset.tilewidth)
+				) {
+					continue;
 				}
-				object.coords.x = new_x;
-			}*/
-			//draw
-			/*//using single image per object
-			hud.canvas.drawImage(
-				World.data[object_type][object].image,
-				this_object.coords.x,
-				this_object.coords.y
-			);*/
-			
-			if(typeof object.animation == 'undefined') {
-				//static non-animated sprite
-				hud.canvas.drawImage(
-					//image
-					World.map.tileset.spritesheet_image,
-					//source coords
-					//duno why, in normal draw layers thing we need to do tile_width-1 but here we dont need the -1
-					((object.tile_id) % (World.map.tileset.spritesheet_width / World.map.tileset.tilewidth)) * World.map.tileset.tilewidth, //sx,
-					~~((object.tile_id) / (World.map.tileset.spritesheet_width / World.map.tileset.tileheight)) * World.map.tileset.tileheight, //sy,
-					//source size
-					World.map.tileset.tilewidth,
-					World.map.tileset.tileheight,
-					//destination coords
-					object.coords.x, //pixel precision
-					object.coords.y - World.map.tileset.tileheight, //pixel precision
-					//destination size
-					World.map.tileset.tilewidth,
-					World.map.tileset.tileheight
-				);
-			} else {
-				//animated sprite
-				
-				hud.canvas.drawImage(
-					//image
-					World.map.tileset.spritesheet_image,
-					
-					//source coords
-					//duno why, in normal draw layers thing we need to do tile_width-1 but here we dont need the -1
-					(
-						object.animation.frames > 1 ? (object.animation.x*World.map.tileset.tilewidth) + (World.map.tileset.tilewidth * object.animation.frame) :
-						object.animation.x * World.map.tileset.tilewidth
-					),
-					World.map.tileset.tileheight * object.animation.y,
-					
-					//source size
-					World.map.tileset.tilewidth,
-					( typeof object.size != 'undefined' ? object.size.height * World.map.tileset.tileheight : World.map.tileset.tileheight),
-					
-					//destination coords
-					object.coords.x, //pixel precision
-					( typeof object.size != 'undefined' ? object.coords.y - (object.size.height * World.map.tileset.tileheight) : object.coords.y) - World.map.tileset.tileheight,
-					
-					//destination size
-					World.map.tileset.tilewidth,
-					( typeof object.size != 'undefined' ? object.size.height * World.map.tileset.tileheight : World.map.tileset.tileheight),
-					
-				);
-				if(object.animation.frames_passed > object.animation.speed) {
-					if(object.animation.frame < object.animation.frames - 1) object.animation.frame++;
-					else object.animation.frame = 0;
-					object.animation.frames_passed = 0;
+				if(typeof object.animation == 'undefined') {
+					//static non-animated object
+					//...
 				} else {
-					object.animation.frames_passed++;
+					//animated sprite
+					//find this sprite state
+					var state = 'idle'; //only really needed for mobs and stuff that move
+					hud.canvas.drawImage(
+						//image
+						object.image.file,
+						
+						//source coords
+						//duno why, in normal draw layers thing we need to do tile_width-1 but here we dont need the -1
+						(
+							object.animations[state].frames > 1 ? (object.animations[state].x*object.image.w) + (object.image.w * object.animation.frame) :
+							object.animations[state].x * object.image.w
+						),
+						object.image.h * object.animations[state].y,
+						
+						//source size
+						object.image.w,
+						object.image.h,
+						
+						//destination coords
+						object.coords.x, //pixel precision
+						object.coords.y,
+						
+						//destination size
+						object.image.w,
+						object.image.h
+					);
+					if(object.animation.frames_passed > object.animations[state].speed) {
+						if(object.animation.frame < object.animations[state].frames - 1) object.animation.frame++;
+						else object.animation.frame = 0;
+						object.animation.frames_passed = 0;
+					} else {
+						object.animation.frames_passed++;
+					}
 				}
 			}
 		}
