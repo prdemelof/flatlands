@@ -2,7 +2,7 @@
 var player = {
 	name: "player",
 	image: {
-		width:32, height:32, sprite_sheet: new Image(),
+		width:16, height:16, scale:2, sprite_sheet: new Image(),
 		animation: {
 			frame: 0,
 			frames_passed: 0,
@@ -109,13 +109,13 @@ var player = {
 			if(inputManager.key_s) {
 				//down
 				var collide_climbables_coords = {
-					"x": Math.floor( player.coords.x + (player.image.width/2)  ),
+					"x": Math.floor( player.coords.x + ((player.image.width*player.image.scale)/2)  ),
 					"y": Math.floor( player.coords.y + player.climb_speed )
 				}
 			} else {
 				//up
 				var collide_climbables_coords = {
-					"x": Math.floor( player.coords.x + (player.image.width/2)  ),
+					"x": Math.floor( player.coords.x + ((player.image.width*player.image.scale)/2)  ),
 					"y": Math.floor( player.coords.y  ) 
 				}
 			}
@@ -145,7 +145,7 @@ var player = {
 				if(inputManager.key_a && player.coords.x > 0) {
 					player.dir = 'left';
 				}
-				if(inputManager.key_d && player.coords.x < World.size.x * 32 - player.image.width) {
+				if(inputManager.key_d && player.coords.x < World.size.x * World.map.tileset.tilewidth - (player.image.width*player.image.scale)) {
 					player.dir = 'right';
 				}
 			}
@@ -217,18 +217,27 @@ var player = {
 		hud.canvas.save();
 		hud.canvas.scale(flip ? -1 : 1, 1);
 		hud.canvas.drawImage(
+			//image file
 			player_image_file,
+			
+			//source coords
 			(
 				animation.frames > 1 ? (animation.x * player.image.width) + (player.image.width * player.image.animation.frame) :
 				animation.x * player.image.width
 			),
 			player.image.height * animation.y,
+			
+			//source dimensions
 			player.image.width,
 			player.image.height,
-			(flip ? (player.image.width * -1)-player.coords.x : 0+player.coords.x), //flip or no flip
+			
+			//destination coords
+			(flip ? ((player.image.width*player.image.scale) * -1)-player.coords.x : 0+player.coords.x), //flip or no flip
 			player.coords.y,
-			player.image.width,
-			player.image.height,
+			
+			//source dimensions
+			player.image.width * player.image.scale,
+			player.image.height * player.image.scale,
 		);
 		hud.canvas.restore();
 		
@@ -251,14 +260,14 @@ var player = {
 				left: Math.floor( (player.coords.x - ((tiles - 0) * World.map.tileset.tilewidth)) / World.map.tileset.tilewidth ),
 				right: Math.ceil( (player.coords.x + ((tiles - 1) * World.map.tileset.tilewidth)) / World.map.tileset.tilewidth ),
 				top: Math.floor( (player.coords.y - ((tiles - 0) * World.map.tileset.tilewidth)) / World.map.tileset.tileheight ),
-				bottom: Math.floor( (player.coords.y + player.image.height + ((tiles - 1) * World.map.tileset.tileheight)) / World.map.tileset.tileheight ),
+				bottom: Math.floor( (player.coords.y + (player.image.height*player.image.scale) + ((tiles - 1) * World.map.tileset.tileheight)) / World.map.tileset.tileheight ),
 			};
 		} else {
 			return {
 				left: player.coords.x - (tiles * World.map.tileset.tilewidth),
 				right: player.coords.x + (tiles * World.map.tileset.tilewidth),
 				top: player.coords.y - (tiles * World.map.tileset.tilewidth),
-				bottom: player.coords.y + player.image.height + (tiles * World.map.tileset.tilewidth),
+				bottom: player.coords.y + (player.image.height*player.image.scale) + (tiles * World.map.tileset.tilewidth),
 			};
 		}
 	},
@@ -365,7 +374,7 @@ var player = {
 						}
 						
 						colliding = CollisionDetection.isColliding([
-							{x:next_step.x, y:next_step.y, z:player.image.height, w:player.image.width},
+							{x:next_step.x, y:next_step.y, z:player.image.height*player.image.scale, w:player.image.width*player.image.scale},
 							//tile
 							{
 								x: World.map.tileset.tilewidth * x, y: (World.map.tileset.tileheight * y),
@@ -375,7 +384,7 @@ var player = {
 						
 						if(colliding) {
 							if(!player.on_ground && player.movement_state == 'ascending') {
-								config.player_start_coords.y = (y*32) + 32 + player.image.height;
+								config.player_start_coords.y = (y*32) + 32 + (player.image.height*player.image.scale);
 							} else if(!player.on_ground && player.movement_state == 'descending') {
 								config.player_start_coords.y = (y*32) - 32;
 							}
@@ -413,7 +422,7 @@ var player = {
 						hud.canvas.fillRect(
 							//destination coords
 							x * 32,
-							parseInt(player.coords.y) + parseInt(player.image.height),
+							parseInt(player.coords.y) + parseInt(player.image.height*player.image.scale),
 							//destination size
 							World.map.tileset.tilewidth,
 							World.map.tileset.tileheight
@@ -462,7 +471,7 @@ var player = {
 						w: World.map.tileset.colliders[tile_id].width
 					};
 					colliding = CollisionDetection.isColliding([
-						{x:player.coords.x, y:player.coords.y + player.image.height - player.velocity.y, z:1 + player.velocity.y, w:player.image.width},
+						{x:player.coords.x, y:player.coords.y + (player.image.height*player.image.scale) - player.velocity.y, z:1 + player.velocity.y, w:player.image.width*player.image.scale},
 						//tile
 						{
 							x: collided_tile_coords.x, y: collided_tile_coords.y, //-1
@@ -471,9 +480,9 @@ var player = {
 					], false);
 					if(!colliding) continue; //try the next tile.. we try a total of 3 underneath the character
 					if(colliding) {
-						if( player.coords.y != y*player.image.height && player.movement_state != 'ascending' ) {
+						if( player.coords.y != y*(player.image.height*player.image.scale) && player.movement_state != 'ascending' ) {
 							//player is colliding with ground but is not exactly level with the ground... sometimes this happens for some reason, character digs into the ground a little
-							player.coords.y = y * World.map.tileset.tileheight - player.image.height;
+							player.coords.y = y * World.map.tileset.tileheight - (player.image.height*player.image.scale);
 						}
 					}
 					return colliding;
