@@ -5,6 +5,13 @@ var hud = {
 	font_family: 'Arial',
 	start_menu_image: new Image(),
 	object_inspector_box_timeout: null,
+	init: function() {
+		$('canvas')[0].width = $('#canvas_parent').innerWidth();
+		$('canvas')[0].height = $('#canvas_parent').innerHeight();
+		//hud.start_menu_image.src = 'image/start_menu.jpg';
+		hud.canvas = $('canvas')[0].getContext('2d');
+		hud.setFont();
+	},
 	update: function() {
 		if(hud.object_inspector_box_timeout) {
 			hud.updateInspection({
@@ -17,19 +24,15 @@ var hud = {
 			});
 		}
 	},
+	draw: function() {
+		//draw stuff
+	},
 	setFont: function(o) {
 		hud.canvas.fillStyle = ( typeof o != 'undefined' && typeof o.color != 'undefined' ? o.color : 'black' );
 		hud.canvas.font = "" +
 			(typeof o != 'undefined' && typeof o.size != 'undefined' ? o.size : hud.font_size ) + "px " +
 			(typeof o != 'undefined' && typeof o.family != 'undefined' ? o.family : hud.font_family );
 		//hud.canvas.font = hud.font_size + "px "+hud.font_family;
-	},
-	init: function() {
-		$('canvas')[0].width = $('#canvas_parent').innerWidth();
-		$('canvas')[0].height = $('#canvas_parent').innerHeight();
-		//hud.start_menu_image.src = 'image/start_menu.jpg';
-		hud.canvas = $('canvas')[0].getContext('2d');
-		hud.setFont();
 	},
 	drawPlayerStats: function() {
 		//
@@ -93,7 +96,6 @@ var hud = {
 		object_inspector_box.css('left', o.coords.x - ( object_inspector_box.css('width').replace('px', '') / 2 ));
 		object_inspector_box.css('top', o.coords.y - ( object_inspector_box.css('height').replace('px', '') / 2 ));
 	},
-	
 };
 
 /*INGAME MENU*/

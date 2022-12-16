@@ -39,7 +39,6 @@ function render() {
 <div id="canvas_parent">
 	<!-- <div class="seasons_test_label" style="position: fixed; top: 55%; left: 50%; translate: -50% -50%; font-size:20px; padding: 3px 1px; width: 100px; text-align: center; color: white; background-color: rgba(255,255,255,.2); border: 1px solid white;">spring</div> -->
 	
-	
 	<div style="position: fixed; top: 0; left: 0;cursor:pointer; font-size:12px;text-align: center; color: white;background-color: rgba(255,255,255,.2);">
 		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="heart_1">heart</div>
 		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="coin_1">coin</div>
@@ -49,7 +48,8 @@ function render() {
 		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="mush_2">mushroom 2</div>
 		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="mush_3">mushroom 3</div>
 		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="item" data-item-id="mush_4">mushroom 4</div>
-		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="mob" data-item-id="mushroom_4">mob 1</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="mob" data-item-id="mushroom_1">mob 1</div>
+		<div class="spawner" style="float:left;cursor:pointer;padding: 3px 3px; border: 1px solid white;" data-type="mob" data-item-id="bee_1">bee 1</div>
 	</div>
 	<div style="position: fixed; top: 25px; left: 0;cursor:pointer; font-size:12px;text-align: center; color: white;background-color: rgba(255,255,255,.2);">
 		<div class="set_season" style=" padding: 3px 3px;  border: 1px solid white;" data-season="spring">spring</div>
@@ -57,9 +57,6 @@ function render() {
 		<div class="set_season" style=" padding: 3px 3px;  border: 1px solid white;" data-season="fall">fall</div>
 		<div class="set_season" style=" padding: 3px 3px;  border: 1px solid white;" data-season="winter">winter</div>
 	</div>
-	
-	
-	
 	
 	<canvas></canvas>
 </div>
@@ -191,6 +188,7 @@ loop = setInterval(function() {
 	if(hud.show_start_menu) {
 		drawStartMenu();
 	} else {
+		updateGame();
 		drawGame();
 	}
 //}, config.frame_rate / 1000);
@@ -201,19 +199,22 @@ loop = setInterval(function() {
 <script>
 
 function drawStartMenu() {
-	//hud.drawStartMenu();
 	drawGame();
+}
+
+function updateGame() {
+	World.update();
+	player.update();
+	hud.update();
 }
 
 function drawGame() {
 	hud.canvas.save();
 	hud.canvas.translate(Camera.offset.x, Camera.offset.y);
 	
-	//World.drawGround();
-	//World.drawDecorations();
 	World.draw();
-	player.update();
-	hud.update();
+	player.draw();
+	hud.draw();
 	
 	hud.canvas.restore();
 }
@@ -240,4 +241,3 @@ $(document).ready(function() {
 	
 });
 </script>
-

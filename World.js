@@ -44,7 +44,32 @@ var World = {
 	setSeason: function(season) {
 		World.season = season;
 	},
+	draw: function() {
+		for(var layer=0; layer<World.map.layers.length; layer++) {
+			if( World.map.layers[layer].visible ) {
+				if(World.map.layers[layer].type == 'tiles') {
+					World.drawGeography(World.map.layers[layer]);
+				}
+			}
+		}
+		World.drawTeleporters();
+		World.drawObjects();
+		if(typeof World.map.seasons != 'undefined') {
+			World.applySeasonColors();
+		}
+	},
+	update: function() {
+		//update objects (mobs, npcs, items)
+		if( typeof World.map.objects != 'undefined' && typeof World.map.objects['mob'] != 'undefined' ) {
+			for(var i=0; i<World.map.objects['mob'].length; i++) {
+				World.map.objects['mob'][i].update();
+			}
+		}
+	},
 	spawnObject: function(o) {
+		
+		//TODO: we need to move this entire function somewhere else. maybe to Objects.js
+		
 		//example: World.spawnObject({"type":"item", "object_id":"heart_1", "count":1, "coords": {"x":1248, "y": 650} });
 		var spawn_coords;
 		if(typeof o.coords == 'undefined') {
@@ -57,48 +82,39 @@ var World = {
 			}
 		} else {
 			//spawning at a specific position
-			//spawn_coords.x = o.coords.x - (World.map.tileset.tilewidth / 2);
-			//spawn_coords.y = o.coords.y + (World.map.tileset.tileheight / 2);
 			spawn_coords = {
 				x: o.coords.x,
 				y: o.coords.y
 			};
 		}
-		
-		//TODO: handle the case where the object may or may not have an animation. its either "animation" or "tile_id"
-		
 		if( !config.paused || (typeof o.ignore_pause != 'undefined' && o.ignore_pause) ) {
+			
+			//TODO: this entire thing sucks. need to find a better way to handle object instantiation
+			
 			var new_object = structuredClone(Objects[o.type][o.object_id]);
 			//set important variables, such as this object's ID and it's image source
 			new_object.coords = { "x": spawn_coords.x, "y": spawn_coords.y };
 			new_object.id = o.object_id;
+			//handle graphics and animation
 			if(typeof new_object.animations != 'undefined') {
-				new_object.animation = {"frame":0, "frames_passed":0};
+				new_object.animation = {frame:0, frames_passed:0};
 			}
 			new_object.image.file = new Image();
-			//new_object.image.file.src = "objects/"+o.type+"/"+o.object_id+"/"+o.object_id+".png";
 			new_object.image.file.src = "image/spritesheets/"+o.type+"/"+o.object_id+".png";
+			//handle functions
+			if(o.type == 'mob') {
+				addProperties(new_object, objectProperties['mob']);
+				addMethods(new_object, objectMethods['mob']);
+			} else if(o.type == 'npc') {
+				//new_object.update = function() {};
+				//addProperties(new_object, objectProperties['npc']);
+				//addMethods(new_object, objectMethods['npc']);
+			}
 			//put this object into the main map objects array
 			if(typeof World.map.objects[o.type] == 'undefined') {
 				World.map.objects[o.type] = [];
 			}
 			World.map.objects[o.type].push(new_object);
-		}
-	},
-	draw: function() {
-		//draw geography
-		for(var layer=0; layer<World.map.layers.length; layer++) {
-			if( World.map.layers[layer].visible ) {
-				if(World.map.layers[layer].type == 'tiles') {
-					World.drawGeography(World.map.layers[layer]);
-				}
-			}
-		}
-		//draw objects
-		World.drawTeleporters();
-		World.drawObjects();
-		if(typeof World.map.seasons != 'undefined') {
-			World.updateSeasonColors();
 		}
 	},
 	drawObjects: function() {
@@ -120,8 +136,18 @@ var World = {
 					//...
 				} else {
 					//animated sprite
-					//find this sprite state
+					
+					//TODO: find this sprite state
+					
 					var state = 'idle'; //only really needed for mobs and stuff that move
+					
+					//flip the image if moving left
+					var flip = false;
+					if(typeof object.dir != 'undefined') {
+						flip = (object.dir == 'left');
+						hud.canvas.save();
+						hud.canvas.scale(flip ? -1 : 1, 1);
+					}
 					
 					hud.canvas.drawImage(
 						//image
@@ -140,14 +166,17 @@ var World = {
 						object.image.h,
 						
 						//destination coords
-						object.coords.x, //pixel precision
+						//object.coords.x, //pixel precision
+						(flip ? ((object.image.w*object.scale) * -1)-object.coords.x : 0+object.coords.x), //flip or no flip
 						object.coords.y,
 						
 						//destination size
 						(typeof object.scale != 'undefined' ? object.image.w * object.scale : object.image.w),
 						(typeof object.scale != 'undefined' ? object.image.h * object.scale : object.image.h)
 					);
-					
+					if(typeof object.dir != 'undefined') {
+						hud.canvas.restore();
+					}
 					if(object.animation.frames_passed > object.animations[state].speed) {
 						if(object.animation.frame < object.animations[state].frames - 1) object.animation.frame++;
 						else object.animation.frame = 0;
@@ -244,7 +273,7 @@ var World = {
 			}
 		}
 	},
-	updateSeasonColors: function() {
+	applySeasonColors: function() {
 		if(typeof World.map.seasons[World.season].colors == 'undefined') {
 			//this season has no color change (spring is the default color in the spritesheet)
 			return;

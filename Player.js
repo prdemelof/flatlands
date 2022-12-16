@@ -44,6 +44,9 @@ var player = {
 		}
 	},
 	update: function() {
+		
+	},
+	draw: function() {
 		//control speed
 		if(!config.paused) player.speed = player.walk_speed;
 		else player.speed = 0;
@@ -249,7 +252,6 @@ var player = {
 			player.image.animation.frames_passed++;
 		}
 	},
-	
 	getCollisionRange: function(o) {
 		if(typeof o == 'undefined') o = {};
 		//var tiles = 2; //how far should we scan for collision
@@ -271,26 +273,6 @@ var player = {
 			};
 		}
 	},
-	
-	/*
-	getTileCoords: function() {
-		var tile_x = Math.floor( (player.coords.x + (player.image.width/2)) / World.map.tileset.tilewidth );
-		var tile_y = Math.floor( player.coords.y / World.map.tileset.tileheight );
-		var tile_coords = { "x": tile_x, "y": tile_y };
-		return tile_coords;
-	},
-	*/
-	/*
-	getTileId: function(layer) {
-		var tile_coords = this.getTileCoords();
-		if( typeof layer.data[tile_coords.y] != 'undefined' && typeof layer.data[tile_coords.y][tile_coords.x] != 'undefined' ) {
-			var tile_id = layer.data[tile_coords.y][tile_coords.x];
-		} else {
-			
-		}
-		return tile_id - 1; //-1 because tiles actually start from 0
-	},
-	*/
 	getTileId: function(o) {
 		var tile_x = Math.floor( o.coords.x / World.map.tileset.tilewidth );
 		var tile_y = Math.floor( o.coords.y / World.map.tileset.tileheight );
@@ -301,14 +283,12 @@ var player = {
 		}
 		return tile_id - 1; //-1 because tiles actually start from 0
 	},
-	
 	getTileCoords: function() {
 		return {
 			x: Math.round(player.coords.x / World.map.tileset.tilewidth),
 			y: Math.round(player.coords.y / World.map.tileset.tileheight)
 		};
 	},
-	
 	collideWithGeometry: function(o) {
 		if(player.movement_state == 'idle') {
 			//not moving, obviously not going to collide (edit: unless falling into something)
@@ -399,7 +379,6 @@ var player = {
 		}
 		return false;
 	},
-	
 	collideWithGround: function(o) {
 		if(
 			typeof World.map.tileset.colliders == 'undefined' || !World.map.tileset.colliders.length()
@@ -491,7 +470,6 @@ var player = {
 		}
 		//return true;
 	},
-	
 	collideWithTeleporters: function(o) {
 		var colliding = false;
 		var player_tile_coords = player.getTileCoords();
@@ -509,7 +487,6 @@ var player = {
 			return false;
 		}
 	},
-	
 	collideWithClimbables: function(o) {
 		if(player.movement_state == 'idle') {
 			//not moving, obviously not going to collide (edit: unless falling into something)
@@ -521,7 +498,6 @@ var player = {
 		var tile_id = player.getTileId({"layer":World.map.layers[0], "coords": {"x":o.coords.x, "y":o.coords.y}});
 		return $.inArray(tile_id, World.map.tileset.climbables) !== -1;
 	}
-	
 };
 
 //player.image.file.src = "image/player.png";
