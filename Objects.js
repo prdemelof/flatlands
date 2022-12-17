@@ -5,12 +5,13 @@ var Objects = {
 		water_jungle: { image: {w:32, h:32}, animations: {idle: {x:0, y:0, frames:8, speed:2}} },
 	},
 	mob: {
-		mushroom_1: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
-		mushroom_2: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
-		mushroom_3: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
-		mushroom_4: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
+		mushroom_red: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
+		mushroom_yellow: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
+		mushroom_purple: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
+		mushroom_green: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
 		bee_1: { scale: 2, image: {w:18, h:18}, walk_speed: 2, animations: {idle: {x:0, y:0, frames:4, speed:1}} },
-		bomb_1: { scale: 2, image: {w:17, h:17}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:1}, moving: {x:0, y:1, frames:4, speed:2}} },
+		bomb_gray: { scale: 2, image: {w:17, h:17}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:1}, moving: {x:0, y:1, frames:4, speed:2}} },
+		balloon_red: { scale: 2, image: {w:17, h:17}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:1}, moving: {x:0, y:1, frames:4, speed:2}} },
 	},
 	item: {
 		coin_1: { scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:12, speed:2}} },
