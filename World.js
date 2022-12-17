@@ -164,10 +164,7 @@ var World = {
 					//...
 				} else {
 					//animated sprite
-					
-					//TODO: find this sprite state
-					
-					var state = 'idle'; //only really needed for mobs and stuff that move
+					var state = (typeof object.movement_state != 'undefined' && typeof object.animations[object.movement_state] != 'undefined' ? object.movement_state : 'idle'); //only really needed for mobs and stuff that move
 					
 					//flip the image if moving left
 					var flip = false;

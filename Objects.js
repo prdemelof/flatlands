@@ -5,10 +5,10 @@ var Objects = {
 		water_jungle: { image: {w:32, h:32}, animations: {idle: {x:0, y:0, frames:8, speed:2}} },
 	},
 	mob: {
-		mushroom_1: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		mushroom_2: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		mushroom_3: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		mushroom_4: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
+		mushroom_1: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
+		mushroom_2: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
+		mushroom_3: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
+		mushroom_4: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
 		bee_1: { scale: 2, image: {w:18, h:18}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:1}} },
 	},
 	item: {
