@@ -290,6 +290,10 @@ var player = {
 		};
 	},
 	collideWithGeometry: function(o) {
+		
+		//NOT IMPLEMENTED
+		return;
+		
 		if(player.movement_state == 'idle') {
 			//not moving, obviously not going to collide (edit: unless falling into something)
 			//return false;
@@ -500,5 +504,4 @@ var player = {
 	}
 };
 
-//player.image.file.src = "image/player.png";
 player.image.sprite_sheet.src = "image/player/player_sprite_sheet.png";
