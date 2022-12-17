@@ -62,5 +62,9 @@ var System = {
 	//rounding helper function. originally designed to round to exactly 5
 	roundNearest: function(round_to, x) {
 		return (x % round_to) >= (round_to / 2) ? parseInt(x / round_to) * round_to + round_to : parseInt(x / round_to) * round_to;
+	},
+	randomNumberBetween: function(min, max) {
+		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
+	
 };

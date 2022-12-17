@@ -6,6 +6,7 @@ var World = {
 	season: "spring",
 	sky_color: "#55b4ff",
 	gravity: 1,
+	max_mobs: 8,
 	//size: {x:hud.canvas_parent.width / 32, y:0}, //not working because the world is created after setting canvas size
 	size: {x:0, y:0},
 	draw_margin: {top:10, left:10, right:10, bottom:10}, //amount of tiles to draw around the camera view range
@@ -65,6 +66,33 @@ var World = {
 				World.map.objects['mob'][i].update();
 			}
 		}
+		//randomly spawn mobs up to a certain limit
+		if(typeof World.map.objects['mob'] == 'undefined' || World.map.objects['mob'].length < World.max_mobs) {
+			var foo = Math.random() * 100;
+			if(foo <= 0.5) { //% chance to spawn a new mob at this tick
+				var mobs = Object.keys(Objects.mob);
+				var mob_id = mobs[ mobs.length * Math.random() << 0];
+				//TODO: this may spawn mobs in something, like in the ground or another tile
+				var coords_x = System.randomNumberBetween(0, World.map.width) * World.map.tileset.tilewidth;
+				var coords_y = System.randomNumberBetween(0, World.map.height) * World.map.tileset.tileheight;
+				console.log('spawn: ' + mob_id + ' '+coords_x+','+coords_y);
+				World.spawnObject({"type":'mob', "object_id":mob_id, "count":1, "coords": { "x":coords_x, "y": coords_y } });
+			}
+		}
+		//despawn objects outside of the world
+		//mobs
+		if(typeof World.map.objects['mob'] != 'undefined') {
+			for(var i=0; i<World.map.objects['mob'].length; i++) {
+				if(
+					World.map.objects['mob'][i].coords.x < 0 || World.map.objects['mob'][i].coords.x + (World.map.objects['mob'][i].image.w * World.map.objects['mob'][i].scale) > (World.map.width * World.map.tileset.tilewidth) ||
+					World.map.objects['mob'][i].coords.y < 0 || World.map.objects['mob'][i].coords.y + (World.map.objects['mob'][i].image.h * World.map.objects['mob'][i].scale) > (World.map.height * World.map.tileset.tileheight)
+				) {
+					console.log('despawn OOOB: ' + World.map.objects['mob'][i].id + ' '+World.map.objects['mob'][i].coords.x+','+World.map.objects['mob'][i].coords.y);
+					World.map.objects['mob'].splice(i, 1);
+				}
+			}
+		}
+		//npc
 	},
 	spawnObject: function(o) {
 		
