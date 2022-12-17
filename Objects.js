@@ -5,11 +5,11 @@ var Objects = {
 		water_jungle: { image: {w:32, h:32}, animations: {idle: {x:0, y:0, frames:8, speed:2}} },
 	},
 	mob: {
-		mushroom_1: { scale: 2, image: {w:16, h:16}, walk_speed: 5, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		mushroom_2: { scale: 2, image: {w:16, h:16}, walk_speed: 5, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		mushroom_3: { scale: 2, image: {w:16, h:16}, walk_speed: 5, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		mushroom_4: { scale: 2, image: {w:16, h:16}, walk_speed: 5, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		bee_1: { scale: 2, image: {w:18, h:18}, walk_speed: 5, animations: {idle: {x:0, y:0, frames:4, speed:1}} },
+		mushroom_1: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
+		mushroom_2: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
+		mushroom_3: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
+		mushroom_4: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
+		bee_1: { scale: 2, image: {w:18, h:18}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:1}} },
 	},
 	item: {
 		coin_1: { scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:12, speed:2}} },
@@ -123,7 +123,7 @@ var objectMethods = {
 		'randomMovementState': function() {
 			var state = 'right';
 			var foo = Math.random() * 100;
-			if(foo < 90) {
+			if(foo < 50) {
 				//0-89 = 90%
 				state = 'idle';
 			} else {
@@ -133,15 +133,35 @@ var objectMethods = {
 			return state;
 		},
 		'update': function() {
+			//if(!config.paused) this.speed = this.walk_speed;
+			//else this.speed = 0;
+			if(config.paused) return;
 			
-			//this.coords.x = this.coords.x + 1;
+			//for now mobs can only walk. but later we will add fly_speed, swim_speed, climb_speed, etc
+			this.speed = this.walk_speed;
 			
-			if(!config.paused) this.speed = this.walk_speed;
-			else this.speed = 0;
-			
-			//simple AI to decide what to do
-			var random_state = this.randomMovementState();
-			var random_dir = this.randomDirection();
+			//simple AI
+			if(true) {
+				//decrement the timer
+				this.ai.period_dir--;
+				this.ai.period_movement_state--;
+				var random_state = this.movement_state;
+				var random_dir = this.dir;
+				//decide facing direction and for how long
+				if( this.ai.period_dir <= 0 ) {
+					random_dir = this.randomDirection();
+					var min_seconds = 1 * config.frame_rate;
+					var max_seconds = 5 * config.frame_rate;
+					this.ai.period_dir = System.randomNumberBetween(min_seconds, max_seconds);
+				}
+				//decide movement state and for how long
+				if( this.ai.period_movement_state <= 0 ) {
+					random_state = this.randomMovementState();
+					var min_seconds = 1 * config.frame_rate;
+					var max_seconds = 5 * config.frame_rate;
+					this.ai.period_movement_state = System.randomNumberBetween(min_seconds, max_seconds);
+				}
+			}
 			
 			//handle colliding with ground
 			if(true) {
@@ -183,10 +203,6 @@ var objectMethods = {
 			
 			//find out the movement state and facing direction
 			if(true) {
-				//if(
-				//	(this.speed && (inputManager.key_a || inputManager.key_d)) ||
-				//	(inputManager.key_w || inputManager.key_s) && at_climbable && this.climb_speed
-				//) {
 				if(this.speed && random_state != 'idle') { //is_moving? AI thing
 					if( this.movement_state != 'climbing' && this.speed ) {
 						//moving left or right
@@ -257,7 +273,11 @@ var objectProperties = {
 		'speed': 0,
 		'velocity': {y:0.0},
 		'movement_state': 'idle', //idle, moving
-		'on_ground': false
+		'on_ground': false,
+		'ai': {
+			'period_dir': 0, //how long to remain on this dir until we roll again
+			'period_movement_state': 0 //how long to remain on this movement state until we roll again
+		}
 	}
 };
 
