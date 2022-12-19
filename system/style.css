@@ -13,6 +13,7 @@ body {padding:0;margin:0;}
 .small_fonts {font-family: "Small_Fonts", Verdana, Tahoma;}
 
 #canvas_parent {border:1px solid gray;box-sizing:border-box;/*width:1100px;height:600px;*/margin:0 auto;position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); -webkit-transform: translate(-50%,-50%); -moz-transform: translate(-50%,-50%); -ms-transform: translate(-50%,-50%);}
+canvas {float: left;}
 
 .menu_font_lg {font-size:42px;}
 .menu_font_md {font-size:28px}

@@ -12,7 +12,7 @@ var player = {
 			descending: {x:1, y:2, frames:1, speed:2},
 			climbing: {x:3, y:4, frames:1, speed:5},
 		}
-	}, //spritesheet
+	},
 	sfx: {
 		jump: SoundEngine.getSfx({file: "player/jump_1.wav"}),
 		//land: SoundEngine.getSfx({file:"player/jumpland.wav"}),
@@ -24,7 +24,7 @@ var player = {
 	walk_speed: 5, //to use as a reference of different movements speeds
 	climb_speed: 3, //current climbing speed
 	speed: 0, //current movement speed
-	movement_state: 'idle', //idle, moving
+	movement_state: 'idle', //idle, moving, ascending, descending, climbing
 	on_ground: false,
 	startJump: function() {
 		//space key down
@@ -44,7 +44,7 @@ var player = {
 		}
 	},
 	update: function() {
-		
+		//TODO: update stuff is currently in draw function. need to move it here
 	},
 	draw: function() {
 		//control speed
@@ -290,6 +290,10 @@ var player = {
 		};
 	},
 	collideWithGeometry: function(o) {
+		
+		//NOT IMPLEMENTED
+		return;
+		
 		if(player.movement_state == 'idle') {
 			//not moving, obviously not going to collide (edit: unless falling into something)
 			//return false;
@@ -450,7 +454,15 @@ var player = {
 						w: World.map.tileset.colliders[tile_id].width
 					};
 					colliding = CollisionDetection.isColliding([
-						{x:player.coords.x, y:player.coords.y + (player.image.height*player.image.scale) - player.velocity.y, z:1 + player.velocity.y, w:player.image.width*player.image.scale},
+						
+						//{x:player.coords.x, y:player.coords.y + (player.image.height*player.image.scale) - player.velocity.y, z:1 + player.velocity.y, w:player.image.width*player.image.scale},
+						{
+							x:player.coords.x,
+							y:player.coords.y + (player.image.height*player.image.scale) - player.velocity.y,
+							z:1 + player.velocity.y,
+							w:player.image.width*player.image.scale
+						},
+						
 						//tile
 						{
 							x: collided_tile_coords.x, y: collided_tile_coords.y, //-1
@@ -500,5 +512,4 @@ var player = {
 	}
 };
 
-//player.image.file.src = "image/player.png";
 player.image.sprite_sheet.src = "image/player/player_sprite_sheet.png";

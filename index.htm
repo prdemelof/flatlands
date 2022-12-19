@@ -57,6 +57,8 @@ function render() {
 		<div class="set_season" style=" padding: 3px 3px;  border: 1px solid white;" data-season="winter">winter</div>
 	</div>
 	
+	<div id="debug_mobile_controls" style="background-color:purple;position:fixed;top:0;left:0;"></div>
+	
 	<canvas></canvas>
 </div>
 
@@ -105,12 +107,6 @@ function render() {
 
 <script>
 
-
-
-
-
-
-
 //TESTING STUFF
 
 $('.set_season').click(function() {
@@ -119,23 +115,10 @@ $('.set_season').click(function() {
 $('.spawner').click(function() {
 	World.spawnObject({"type":$(this).attr('data-type'), "object_id":$(this).attr('data-item-id'), "count":1, "coords": { "x":( player.dir == 'left' ? player.coords.x-32 : player.coords.x+32 ), "y": player.coords.y } });
 });
-/*
-{ "name":"coin", "coords": {"x": 1808, "y": 640}, "animation": {"x":0, "y":0, "frames":12, "speed":2, "frame": 0, "frames_passed": 0} },
-{ "name":"honey", "coords": {"x": 1056, "y": 672}, "animation": {"x":0, "y":1, "frames":4, "speed":2, "frame": 0, "frames_passed": 0} },
-{ "name":"heart", "coords": {"x": 1952, "y": 704}, "animation": {"x":0, "y":2, "frames":4, "speed":2, "frame": 0, "frames_passed": 0} },
-{ "name":"key", "coords": {"x": 1344, "y": 703}, "animation": {"x":0, "y":3, "frames":4, "speed":2, "frame": 0, "frames_passed": 0} },
-{ "name":"mushroom", "coords": {"x": 2112, "y": 704}, "animation": {"x":0, "y":7, "frames":4, "speed":2, "frame": 0, "frames_passed": 0} },
-*/
-//var setSeason = function(season) {
-//	World.starting_season = season;
-//}
 
 //TESTING STUFF
 
-
-
 //resize the canvas
-//$('#canvas_parent').height(window.innerHeight - ( 1 / 6 * window.innerHeight ));
 $('#canvas_parent').height( 27*32 ); //27 tiles
 $('#canvas_parent').width(window.innerWidth - ( 1 / 5 * window.innerWidth ) );
 
@@ -147,7 +130,7 @@ var config = {
 };
 config.player_start_coords = {
 	x: $('#canvas_parent').width() - ( $('#canvas_parent').width() / 2) - 16,
-	y: 673 //32 is the player height
+	y: 673
 };
 </script>
 
@@ -170,9 +153,8 @@ SoundEngine.init();
 hud.init();
 World.init();
 
-player.coords.x = World.size.x*32 - ( (World.size.x*32) / 2) - 16;
-//config.player_start_coords.y = $('#canvas_parent').height() - ( 1 / 6 * window.innerHeight ) - 32;
-Camera.offset.x = -player.coords.x + (hud.canvas_parent.width/2) - 16;
+player.coords.x = World.size.x*World.map.tileset.tilewidth - ( (World.size.x*World.map.tileset.tilewidth) / 2) - (World.map.tileset.tilewidth/2);
+Camera.offset.x = -player.coords.x + (hud.canvas_parent.width/2) - (World.map.tileset.tilewidth/2);
 
 //fix for scaled images
 hud.canvas.mozImageSmoothingEnabled = false;
@@ -190,7 +172,6 @@ loop = setInterval(function() {
 		updateGame();
 		drawGame();
 	}
-//}, config.frame_rate / 1000);
 }, 1000 / config.frame_rate);
 
 </script>
@@ -219,7 +200,6 @@ function drawGame() {
 }
 
 function quit() {
-	//run = false;
 	clearInterval(loop);
 	console.log("quitting");
 }
