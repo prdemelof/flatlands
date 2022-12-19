@@ -5,12 +5,56 @@ var hud = {
 	font_family: 'Arial',
 	start_menu_image: new Image(),
 	object_inspector_box_timeout: null,
+	platform: 'desktop',
+	mobile_controls: {
+		margin: 32, //margin from the endges of the screen
+		finger_dimensions: 60, //pixels
+	},
 	init: function() {
-		$('canvas')[0].width = $('#canvas_parent').innerWidth();
-		$('canvas')[0].height = $('#canvas_parent').innerHeight();
-		//hud.start_menu_image.src = 'image/start_menu.jpg';
-		hud.canvas = $('canvas')[0].getContext('2d');
-		hud.setFont();
+		if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+			//mobile
+			console.log('hud init: mobile');
+			hud.platform = 'mobile';
+			
+			$('#canvas_parent').css('top', 0);
+			$('#canvas_parent').css('left', 0);
+			$('#canvas_parent').css('transform', 'none');
+			
+			$('#canvas_parent').css('width', window.innerWidth);
+			$('#canvas_parent').css('height', window.innerHeight);
+			
+			$('canvas')[0].width = $('#canvas_parent').innerWidth();
+			$('canvas')[0].height = $('#canvas_parent').innerHeight();
+			//hud.start_menu_image.src = 'image/start_menu.jpg';
+			hud.canvas = $('canvas')[0].getContext('2d');
+			hud.setFont();
+			
+			//for both rendering and input handling (inputManager.js)
+			hud.mobile_controls['coords'] = {
+				jump: {
+					x: (window.innerWidth - hud.mobile_controls.finger_dimensions - hud.mobile_controls.margin),
+					y: (window.innerHeight - hud.mobile_controls.finger_dimensions - hud.mobile_controls.margin),
+				},
+				move_left: {
+					x: (0 + hud.mobile_controls.finger_dimensions + hud.mobile_controls.margin),
+					y: (window.innerHeight - hud.mobile_controls.finger_dimensions - hud.mobile_controls.margin),
+				},
+				move_right: {
+					x: (0 + (hud.mobile_controls.finger_dimensions*2) + (hud.mobile_controls.margin*2)),
+					y: (window.innerHeight - hud.mobile_controls.finger_dimensions - hud.mobile_controls.margin),
+				},
+			};
+			
+		} else {
+			//desktop
+			console.log('hud init: desktop');
+			hud.platform = 'desktop';
+			$('canvas')[0].width = $('#canvas_parent').innerWidth();
+			$('canvas')[0].height = $('#canvas_parent').innerHeight();
+			//hud.start_menu_image.src = 'image/start_menu.jpg';
+			hud.canvas = $('canvas')[0].getContext('2d');
+			hud.setFont();
+		}
 	},
 	update: function() {
 		if(hud.object_inspector_box_timeout) {
@@ -26,6 +70,7 @@ var hud = {
 	},
 	draw: function() {
 		//draw stuff
+		
 	},
 	setFont: function(o) {
 		hud.canvas.fillStyle = ( typeof o != 'undefined' && typeof o.color != 'undefined' ? o.color : 'black' );
