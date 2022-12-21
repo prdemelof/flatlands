@@ -13,6 +13,9 @@ var player = {
 			climbing: {x:3, y:4, frames:1, speed:5},
 		}
 	},
+	hair_image: {
+		width:16, height:16, scale:2, sprite_sheet: new Image(),
+	},
 	sfx: {
 		jump: SoundEngine.getSfx({file: "player/jump_1.wav"}),
 		//land: SoundEngine.getSfx({file:"player/jumpland.wav"}),
@@ -215,13 +218,12 @@ var player = {
 		
 		//render the player
 		//flip the image if moving left
-		var player_image_file = player.image.sprite_sheet;
 		var flip = (player.dir == 'left');
 		hud.canvas.save();
 		hud.canvas.scale(flip ? -1 : 1, 1);
 		hud.canvas.drawImage(
 			//image file
-			player_image_file,
+			player.image.sprite_sheet,
 			
 			//source coords
 			(
@@ -242,6 +244,32 @@ var player = {
 			player.image.width * player.image.scale,
 			player.image.height * player.image.scale,
 		);
+		
+		//render the hair
+		hud.canvas.drawImage(
+			//image file
+			player.hair_image.sprite_sheet,
+			
+			//source coords
+			(
+				animation.frames > 1 ? (animation.x * player.hair_image.width) + (player.hair_image.width * player.image.animation.frame) :
+				animation.x * player.hair_image.width
+			),
+			player.hair_image.height * animation.y,
+			
+			//source dimensions
+			player.hair_image.width,
+			player.hair_image.height,
+			
+			//destination coords
+			(flip ? ((player.hair_image.width*player.hair_image.scale) * -1)-player.coords.x : 0+player.coords.x), //flip or no flip
+			player.coords.y,
+			
+			//source dimensions
+			player.hair_image.width * player.hair_image.scale,
+			player.hair_image.height * player.hair_image.scale,
+		);
+		
 		hud.canvas.restore();
 		
 		if(player.image.animation.frames_passed > animation.speed) {
@@ -513,3 +541,4 @@ var player = {
 };
 
 player.image.sprite_sheet.src = "image/player/player_sprite_sheet.png";
+player.hair_image.sprite_sheet.src = "image/player/hair_sprite_sheet.png";
