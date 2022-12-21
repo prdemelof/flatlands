@@ -246,6 +246,12 @@ var player = {
 		
 		//render the hair
 		if( player.hair.style != null && player.hair.style.image != null ) {
+			
+			//var hair_middle = player.hair.style.width / 2;
+			//var player_middle = player.image.width / 2;
+			var hair_width_difference = (player.hair.style.width - player.image.width) * 2;
+			//var hair_width_difference = 4;
+			
 			hud.canvas.drawImage(
 				//image file
 				player.hair.style.image,
@@ -262,7 +268,7 @@ var player = {
 				player.hair.style.height,
 				
 				//destination coords
-				(flip ? ((player.hair.style.width*player.hair.style.scale) * -1)-player.coords.x : 0+player.coords.x), //flip or no flip
+				(flip ? ((player.hair.style.width*player.hair.style.scale) * -1)-player.coords.x : 0+player.coords.x-hair_width_difference), //flip or no flip
 				player.coords.y,
 				
 				//source dimensions
