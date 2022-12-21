@@ -1,7 +1,8 @@
 var Hairs = {
 	human: {
-		hair_1: {width:16, height:16, scale:2, image: null,},
-		hair_2: {width:16, height:16, scale:2, image: null,}
+		hair_1_m: {width:16, height:16, scale:2, image: null,},
+		hair_2_m: {width:16, height:16, scale:2, image: null,},
+		hair_3_f: {width:16, height:16, scale:2, image: null,},
 	},
 };
 

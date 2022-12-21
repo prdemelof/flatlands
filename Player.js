@@ -14,7 +14,7 @@ var player = {
 			climbing: {x:3, y:4, frames:1, speed:5},
 		}
 	},
-	hair: null,
+	hair: {style:null, color:null},
 	sfx: {
 		jump: SoundEngine.getSfx({file: "player/jump_1.wav"}),
 		//land: SoundEngine.getSfx({file:"player/jumpland.wav"}),
@@ -245,30 +245,35 @@ var player = {
 		);
 		
 		//render the hair
-		if( player.hair != null && player.hair.image != null ) {
+		if( player.hair.style != null && player.hair.style.image != null ) {
 			hud.canvas.drawImage(
 				//image file
-				player.hair.image,
+				player.hair.style.image,
 				
 				//source coords
 				(
-					animation.frames > 1 ? (animation.x * player.hair.width) + (player.hair.width * player.image.animation.frame) :
-					animation.x * player.hair.width
+					animation.frames > 1 ? (animation.x * player.hair.style.width) + (player.hair.style.width * player.image.animation.frame) :
+					animation.x * player.hair.style.width
 				),
-				player.hair.height * animation.y,
+				player.hair.style.height * animation.y,
 				
 				//source dimensions
-				player.hair.width,
-				player.hair.height,
+				player.hair.style.width,
+				player.hair.style.height,
 				
 				//destination coords
-				(flip ? ((player.hair.width*player.hair.scale) * -1)-player.coords.x : 0+player.coords.x), //flip or no flip
+				(flip ? ((player.hair.style.width*player.hair.style.scale) * -1)-player.coords.x : 0+player.coords.x), //flip or no flip
 				player.coords.y,
 				
 				//source dimensions
-				player.hair.width * player.hair.scale,
-				player.hair.height * player.hair.scale,
+				player.hair.style.width * player.hair.style.scale,
+				player.hair.style.height * player.hair.style.scale,
 			);
+			
+			//update the hair color
+			if(player.hair.color != null) {
+				player.applyHairColor();
+			}
 		}
 		hud.canvas.restore();
 		
@@ -280,9 +285,41 @@ var player = {
 			player.image.animation.frames_passed++;
 		}
 	},
-	setHair: function(hair_id) {
-		player.hair = Hairs[player.race][hair_id];
-		player.hair.image = System.loadImage({path: 'image/spritesheets/hair/'+player.race+'/'+hair_id+'.png'});
+	setHairStyle: function(hair_id) {
+		//choose a new hair style
+		player.hair.style = Hairs[player.race][hair_id];
+		player.hair.style.image = System.loadImage({path: 'image/spritesheets/hair/'+player.race+'/'+hair_id+'.png'});
+		//player.setHairColor({r:65, g:24, b:6});
+	},
+	setHairColor: function(color) {
+		//choose a new hair color
+		player.hair.color = color;
+	},
+	applyHairColor: function() {
+		//replace the spritesheet pixels to the correct color chosen by the player
+		const canvas = document.querySelector("canvas");
+		const { width, height } = canvas;
+		const aaa = hud.canvas.getImageData(0, 0, width, height);
+		const { data } = aaa;
+		const { length } = data;
+		
+		//#e510da - 229, 16, 218, 255 - color values in spritesheet
+		for(let i=0; i<length; i+=4) { //red, green, blue, and alpha
+			const r = data[i + 0];
+			const g = data[i + 1];
+			const b = data[i + 2];
+			const a = data[i + 3];
+			if(a === 255) { //alpha is 100%
+				if(r === 229 && g === 16 && b === 218) { //this pixel of the image is the one we need to replace with something else
+					data[i + 0] = player.hair.color.r;
+					data[i + 1] = player.hair.color.g;
+					data[i + 2] = player.hair.color.b;
+				}
+			}
+		}
+		
+		//replace all relevant pixels on the entire canvas
+		hud.canvas.putImageData(aaa, 0, 0);
 	},
 	getCollisionRange: function(o) {
 		if(typeof o == 'undefined') o = {};
