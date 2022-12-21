@@ -55,6 +55,8 @@ function render() {
 		<div class="set_season" style="padding: 3px 3px;  border: 1px solid white;" data-season="summer">summer</div>
 		<div class="set_season" style=" padding: 3px 3px;  border: 1px solid white;" data-season="fall">fall</div>
 		<div class="set_season" style=" padding: 3px 3px;  border: 1px solid white;" data-season="winter">winter</div>
+		<div class="set_hair" style=" padding: 3px 3px;  border: 1px solid white;" data-hair="hair_1">hair 1</div>
+		<div class="set_hair" style=" padding: 3px 3px;  border: 1px solid white;" data-hair="hair_2">hair 2</div>
 	</div>
 	
 	<div id="debug_mobile_controls" style="background-color:purple;position:fixed;top:0;left:0;"></div>
@@ -112,6 +114,9 @@ function render() {
 $('.set_season').click(function() {
 	World.setSeason($(this).attr('data-season'));
 });
+$('.set_hair').click(function() {
+	player.setHair($(this).attr('data-hair'));
+});
 $('.spawner').click(function() {
 	World.spawnObject({"type":$(this).attr('data-type'), "object_id":$(this).attr('data-item-id'), "count":1, "coords": { "x":( player.dir == 'left' ? player.coords.x-32 : player.coords.x+32 ), "y": player.coords.y } });
 });
@@ -135,6 +140,7 @@ config.player_start_coords = {
 </script>
 
 <script src="Objects.js"></script>
+<script src="Hairs.js"></script>
 <script src="system/helpers.js"></script>
 <script src="System.js"></script>
 <script src="CollisionDetection.js"></script>

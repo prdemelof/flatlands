@@ -13,7 +13,7 @@ var hud = {
 	init: function() {
 		if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
 			//mobile
-			console.log('hud init: mobile');
+			//console.log('hud init: mobile');
 			hud.platform = 'mobile';
 			
 			$('#canvas_parent').css('top', 0);
@@ -47,7 +47,7 @@ var hud = {
 			
 		} else {
 			//desktop
-			console.log('hud init: desktop');
+			//console.log('hud init: desktop');
 			hud.platform = 'desktop';
 			$('canvas')[0].width = $('#canvas_parent').innerWidth();
 			$('canvas')[0].height = $('#canvas_parent').innerHeight();

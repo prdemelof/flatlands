@@ -189,7 +189,7 @@ var touchInputHandlerEnd = function(e) {
 //MOBILE EVENTS
 if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
 	//mobile
-	console.log('inputManager: mobile');
+	//console.log('inputManager: mobile');
 	//touch handlers
 	hud.canvas_parent.addEventListener("touchstart", touchInputHandlerStart);
 	hud.canvas_parent.addEventListener("touchmove", touchInputHandlerMove);
@@ -197,7 +197,7 @@ if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigat
 	hud.canvas_parent.addEventListener("touchcancel", touchInputHandlerEnd);
 } else {
 	//desktop
-	console.log('inputManager: desktop');
+	//console.log('inputManager: desktop');
 	//DESKTOP EVENTS
 	hud.canvas_parent.addEventListener('mousemove', function(e) {
 		inputManager.mouse_coords = {x:e.clientX, y:e.clientY}; //coordinates within the browser window
