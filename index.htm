@@ -127,7 +127,13 @@ $('.set_hair_color').click(function() {
 	player.setHairColor({r:$(this).attr('data-r'), g:$(this).attr('data-g'), b:$(this).attr('data-b')});
 });
 $('.spawner').click(function() {
-	World.spawnObject({"type":$(this).attr('data-type'), "object_id":$(this).attr('data-item-id'), "count":1, "coords": { "x":( player.dir == 'left' ? player.coords.x-32 : player.coords.x+32 ), "y": player.coords.y } });
+	//position the object right in front of the player, without falling through the ground if the object is taller than the player
+	if(typeof Objects[$(this).attr('data-type')][$(this).attr('data-item-id')].scale != 'undefined') {
+		var coords_y = (player.coords.y + (player.image.height*player.image.scale)) - (Objects[$(this).attr('data-type')][$(this).attr('data-item-id')].image.h * Objects[$(this).attr('data-type')][$(this).attr('data-item-id')].scale);
+	} else {
+		var coords_y = (player.coords.y + (player.image.height*player.image.scale)) - Objects[$(this).attr('data-type')][$(this).attr('data-item-id')].image.h;
+	}
+	World.spawnObject({"type":$(this).attr('data-type'), "object_id":$(this).attr('data-item-id'), "count":1, "coords": { "x":( player.dir == 'left' ? player.coords.x-32 : player.coords.x+32 ), "y": coords_y } });
 });
 
 //TESTING STUFF
@@ -171,13 +177,14 @@ World.init();
 player.coords.x = World.size.x*World.map.tileset.tilewidth - ( (World.size.x*World.map.tileset.tilewidth) / 2) - (World.map.tileset.tilewidth/2);
 Camera.offset.x = -player.coords.x + (hud.canvas_parent.width/2) - (World.map.tileset.tilewidth/2);
 
-//fix for scaled images
+//fix for blurred scaled images
 hud.canvas.mozImageSmoothingEnabled = false;
 hud.canvas.webkitImageSmoothingEnabled = false;
 hud.canvas.imageSmoothingEnabled = false;
 
 hud.toggleStartMenu();
 
+//a better approach would be to have a little delta time thing. but for simplicity, a simple interval will do
 loop = setInterval(function() {
 	if(config.paused && !hud.show_start_menu) return;
 	refresh();

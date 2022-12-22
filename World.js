@@ -116,9 +116,7 @@ var World = {
 			};
 		}
 		if( !config.paused || (typeof o.ignore_pause != 'undefined' && o.ignore_pause) ) {
-			
-			//TODO: this entire thing sucks. need to find a better way to handle object instantiation
-			
+			//TODO: this entire thing sucks. need to find a better way to handle object instantiation, with prototyping or something
 			var new_object = structuredClone(Objects[o.type][o.object_id]);
 			//set important variables, such as this object's ID and it's image source
 			new_object.coords = { "x": spawn_coords.x, "y": spawn_coords.y };
@@ -393,7 +391,3 @@ $(document).on('click', '#canvas_parent', function() {
 		});
 	}
 });
-
-//load tiles images
-// World.tiles.ground_middle.image.src = "image/tile.png";
-// World.tiles.ground_dirt.image.src = "image/tile_dirt.png";
