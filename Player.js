@@ -3,7 +3,7 @@ var player = {
 	name: "player",
 	race: 'human', //player will be able to choose a race
 	image: {
-		width:16, height:16, scale:2, sprite_sheet: new Image(),
+		width:16, height:16, scale:2, margin_sides:3, sprite_sheet: new Image(), //margin_sides means the empty space on the sides of the character, for collision
 		animation: {
 			frame: 0,
 			frames_passed: 0,
@@ -532,16 +532,16 @@ var player = {
 						
 						//{x:player.coords.x, y:player.coords.y + (player.image.height*player.image.scale) - player.velocity.y, z:1 + player.velocity.y, w:player.image.width*player.image.scale},
 						{
-							x:player.coords.x,
+							x:player.coords.x + (player.image.margin_sides * player.image.scale),
 							y:player.coords.y + (player.image.height*player.image.scale) - player.velocity.y,
 							z:1 + player.velocity.y,
-							w:player.image.width*player.image.scale
+							w:(player.image.width*player.image.scale) - ((player.image.margin_sides*2) * player.image.scale)
 						},
 						
 						//tile
 						{
 							x: collided_tile_coords.x, y: collided_tile_coords.y, //-1
-							z: 1, w: collided_tile_coords.w
+							z:1, w: collided_tile_coords.w
 						}
 					], false);
 					if(!colliding) continue; //try the next tile.. we try a total of 3 underneath the character
@@ -587,5 +587,5 @@ var player = {
 	}
 };
 
-player.image.sprite_sheet.src = "image/player/player_sprite_sheet.png";
+player.image.sprite_sheet.src = "image/spritesheets/char/human_1_spritesheet.png";
 //player.hair_image.sprite_sheet.src = "image/player/hair_sprite_sheet.png";
