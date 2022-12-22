@@ -19,7 +19,14 @@ var player = {
 		jump: SoundEngine.getSfx({file: "player/jump_1.wav"}),
 		land: SoundEngine.getSfx({file: "player/land_1.ogg"}),
 	},
-	inventory: {},
+	inventory: {
+		cat_1: {
+			'1': {item_id:"mush_3", count:1},
+			'2': {item_id:"key_1", count:1},
+			'5': {item_id:"heart_1", count:1},
+			'13': {item_id:"mush_1", count:3},
+		}
+	},
 	equipment: {
 		
 	},
@@ -252,12 +259,7 @@ var player = {
 		
 		//render the hair
 		if( player.hair.style != null && player.hair.style.image != null ) {
-			
-			//var hair_middle = player.hair.style.width / 2;
-			//var player_middle = player.image.width / 2;
 			var hair_width_difference = (player.hair.style.width - player.image.width) * 2;
-			//var hair_width_difference = 4;
-			
 			hud.canvas.drawImage(
 				//image file
 				player.hair.style.image,
@@ -277,7 +279,7 @@ var player = {
 				(flip ? ((player.hair.style.width*player.hair.style.scale) * -1)-player.coords.x : 0+player.coords.x-hair_width_difference), //flip or no flip
 				player.coords.y,
 				
-				//source dimensions
+				//destination dimensions
 				player.hair.style.width * player.hair.style.scale,
 				player.hair.style.height * player.hair.style.scale,
 			);

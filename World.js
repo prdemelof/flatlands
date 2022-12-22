@@ -125,8 +125,8 @@ var World = {
 			if(typeof new_object.animations != 'undefined') {
 				new_object.animation = {frame:0, frames_passed:0};
 			}
-			new_object.image.file = new Image();
-			new_object.image.file.src = "image/spritesheets/"+o.type+"/"+o.object_id+".png";
+			new_object.image.file = System.loadImage({path: "image/spritesheets/"+o.type+"/"+o.object_id+".png"});
+			//new_object.image.file.src = "image/spritesheets/"+o.type+"/"+o.object_id+".png";
 			//handle functions
 			if(o.type == 'mob') {
 				addProperties(new_object, objectProperties['mob']);
