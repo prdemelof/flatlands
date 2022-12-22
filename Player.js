@@ -14,20 +14,22 @@ var player = {
 			climbing: {x:3, y:4, frames:1, speed:5},
 		}
 	},
-	hair: {style:null, color:null},
+	hair: {style:null, color:null}, //bald by default
 	sfx: {
 		jump: SoundEngine.getSfx({file: "player/jump_1.wav"}),
-		//land: SoundEngine.getSfx({file:"player/jumpland.wav"}),
 		land: SoundEngine.getSfx({file: "player/land_1.ogg"}),
 	},
 	dir: 'right', //looking towards which direction
 	coords: {x:config.player_start_coords.x, y:config.player_start_coords.y},
-	velocity: {y:0.0}, //x velocity is being handled by "speed"
-	walk_speed: 5, //to use as a reference of different movements speeds
-	climb_speed: 3, //current climbing speed
-	speed: 0, //current movement speed
-	movement_state: 'idle', //idle, moving, ascending, descending, climbing
+	velocity: {y:0.0}, //x velocity is currently being handled simply by "walk_speed"
+	walk_speed: 5,
+	climb_speed: 3,
+	speed: 0, //current movement speed depending what the player is moving on (ground, water, climbing, etc)
+	movement_state: 'idle', //idle, moving, ascending, descending, climbing ("swimming" on the to do list)
 	on_ground: false,
+	init: function() {
+		player.image.sprite_sheet.src = "image/spritesheets/char/"+player.race+"_spritesheet.png";
+	},
 	startJump: function() {
 		//space key down
 		if(!config.paused) {
@@ -587,5 +589,4 @@ var player = {
 	}
 };
 
-player.image.sprite_sheet.src = "image/spritesheets/char/human_1_spritesheet.png";
-//player.hair_image.sprite_sheet.src = "image/player/hair_sprite_sheet.png";
+

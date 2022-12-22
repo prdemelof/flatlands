@@ -173,6 +173,7 @@ SoundEngine.init();
 
 hud.init();
 World.init();
+player.init();
 
 player.coords.x = World.size.x*World.map.tileset.tilewidth - ( (World.size.x*World.map.tileset.tilewidth) / 2) - (World.map.tileset.tilewidth/2);
 Camera.offset.x = -player.coords.x + (hud.canvas_parent.width/2) - (World.map.tileset.tilewidth/2);
@@ -183,6 +184,10 @@ hud.canvas.webkitImageSmoothingEnabled = false;
 hud.canvas.imageSmoothingEnabled = false;
 
 hud.toggleStartMenu();
+
+if(true) { //having to keep clicking the Play button is a pita. lets disable it for now
+	hud.toggleStartMenu();
+}
 
 //a better approach would be to have a little delta time thing. but for simplicity, a simple interval will do
 loop = setInterval(function() {
