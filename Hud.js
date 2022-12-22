@@ -121,6 +121,33 @@ var hud = {
 			$('#start_menu').show();
 		}
 	},
+	show_inventory: false,
+	toggleInventory: function(show) {
+		if(!config.paused) {
+			//dont allow to open menu when in start menu screen
+			if(typeof show != 'undefined') {
+				console.log('negate');
+				hud.show_inventory = !show; //if show is false, we make it become true which will cause it to hide
+			} else {
+				console.log('dont negate');
+			}
+			if(hud.show_inventory) {
+				hud.show_inventory = false;
+				$('#ingame_menu').fadeOut('fast', function() {
+					$(hud.canvas_parent).parent().removeClass('blur');
+					//config.unpause();
+				});
+			} else {
+				//config.pause();
+				hud.show_inventory = true;
+				$(hud.canvas_parent).parent().addClass('blur');
+				//$('#ingame_menu').fadeIn('fast');
+				$('#ingame_menu').show();
+			}
+		} else {
+			//pressing ESC while in start menu screen, quit the game?
+		}
+	},
 	drawStartMenu: function() {
 		//hud.canvas.drawImage(hud.start_menu_image, 0, 0);
 	},

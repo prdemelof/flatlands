@@ -19,6 +19,10 @@ var player = {
 		jump: SoundEngine.getSfx({file: "player/jump_1.wav"}),
 		land: SoundEngine.getSfx({file: "player/land_1.ogg"}),
 	},
+	inventory: {},
+	equipment: {
+		
+	},
 	dir: 'right', //looking towards which direction
 	coords: {x:config.player_start_coords.x, y:config.player_start_coords.y},
 	velocity: {y:0.0}, //x velocity is currently being handled simply by "walk_speed"
