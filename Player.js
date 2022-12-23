@@ -411,7 +411,7 @@ var player = {
 			y: Math.round(player.coords.y / World.map.tileset.tileheight)
 		};
 	},
-	collideWithGeometry: function(o) {
+	collideWithObjects: function(o) {
 		
 		//NOT IMPLEMENTED
 		return;

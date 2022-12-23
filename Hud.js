@@ -147,7 +147,6 @@ var hud = {
 	},
 	drawInventory: function() {
 		if(hud.show_inventory) {
-			console.log(player.movement_state);
 			//draw inventory UI (window)
 			hud.canvas.drawImage(
 				//image file
