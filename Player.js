@@ -243,7 +243,6 @@ var player = {
 			} else if(inputManager.key_a) {
 				//going left on the climbable
 				player.coords.x = player.coords.x - 1;
-				//Camera.moveRight();
 				Camera.centerOnPlayer();
 			} else if(inputManager.key_d) {
 				//going right on the climbable

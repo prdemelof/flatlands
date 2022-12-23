@@ -81,7 +81,6 @@ var Camera = {
 			var top = Math.floor( Camera.offset.y );
 			var bottom = top + hud.canvas_parent.height;
 		}
-		//return {top:top, right:right, bottom:bottom, left:left};
 		return {top:top, left:left, right:right, bottom:bottom};
 	},
 	centerOnPlayer: function() {

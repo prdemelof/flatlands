@@ -147,7 +147,7 @@ var hud = {
 	},
 	drawInventory: function() {
 		if(hud.show_inventory) {
-			
+			console.log(player.movement_state);
 			//draw inventory UI (window)
 			hud.canvas.drawImage(
 				//image file
@@ -162,7 +162,7 @@ var hud = {
 				hud.inventory.image.height,
 				
 				//destination coords
-				128 + Camera.getViewRange({type:'pixel'}).left,
+				128 + Camera.getViewRange({type:'pixel'}).left - ( ["moving", "ascending", "descending"].includes(player.movement_state) ? (player.dir == 'left' ? -player.speed : player.speed) : 0),
 				128 + Camera.getViewRange({type:'pixel'}).top,
 				
 				//destination dimensions
@@ -184,7 +184,7 @@ var hud = {
 				player.image.height,
 				
 				//destination coords
-				128 + Camera.getViewRange({type:'pixel'}).left + (9 * hud.inventory.scale), //18,
+				128 + Camera.getViewRange({type:'pixel'}).left + (9 * hud.inventory.scale) - ( ["moving", "ascending", "descending"].includes(player.movement_state) ? (player.dir == 'left' ? -player.speed : player.speed) : 0), //18,
 				128 + Camera.getViewRange({type:'pixel'}).top + (19 * hud.inventory.scale), //38,
 				
 				//destination dimensions
@@ -207,7 +207,7 @@ var hud = {
 					player.hair.style.height,
 					
 					//destination coords
-					128 + Camera.getViewRange({type:'pixel'}).left + (9 * hud.inventory.scale) - (hair_width_difference * 2), //18,
+					128 + Camera.getViewRange({type:'pixel'}).left + (9 * hud.inventory.scale) - (hair_width_difference * 2) - ( ["moving", "ascending", "descending"].includes(player.movement_state) ? (player.dir == 'left' ? -player.speed : player.speed) : 0), //18,
 					128 + Camera.getViewRange({type:'pixel'}).top + (19 * hud.inventory.scale), //38,
 					
 					//destination dimensions
@@ -223,7 +223,6 @@ var hud = {
 			
 			//draw objects in the inventory
 			
-			//if( player.inventory[player.inventory.active_category].content.length() ) {
 			var player_active_inventory = player.inventory.getActive();
 			if( player_active_inventory.length() ) {
 				for(var slot_id in player_active_inventory) {
@@ -253,7 +252,7 @@ var hud = {
 						item.image.h,
 						
 						//destination coords
-						coords_x,
+						coords_x - ( ["moving", "ascending", "descending"].includes(player.movement_state) ? (player.dir == 'left' ? -player.speed : player.speed) : 0),
 						coords_y,
 						
 						//destination dimensions
