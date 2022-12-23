@@ -5,24 +5,24 @@ var Objects = {
 		water_jungle: { image: {w:32, h:32}, animations: {idle: {x:0, y:0, frames:8, speed:2}} },
 	},
 	mob: {
-		mushroom_red: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
-		mushroom_yellow: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
-		mushroom_purple: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
-		mushroom_green: { scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
-		bee_1: { scale: 2, image: {w:18, h:18}, walk_speed: 2, animations: {idle: {x:0, y:0, frames:4, speed:1}} },
-		bomb_gray: { scale: 2, image: {w:17, h:17}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
-		balloon_red: { scale: 2, image: {w:16, h:27}, walk_speed: 2, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:8, speed:2}} },
-		balloon_blue: { scale: 2, image: {w:16, h:27}, walk_speed: 2, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:8, speed:2}} },
+		mushroom_red: { margin: {left:1, top:1, right:1, bottom:1}, scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
+		mushroom_yellow: { margin: {left:1, top:1, right:1, bottom:1}, scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
+		mushroom_purple: { margin: {left:1, top:1, right:1, bottom:1}, scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
+		mushroom_green: { margin: {left:1, top:1, right:1, bottom:1}, scale: 2, image: {w:16, h:16}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
+		bee_1: { margin: {left:3, top:3, right:3, bottom:3}, scale: 2, image: {w:18, h:18}, walk_speed: 2, animations: {idle: {x:0, y:0, frames:4, speed:1}} },
+		bomb_gray: { margin: {left:3, top:3, right:3, bottom:1}, scale: 2, image: {w:17, h:17}, walk_speed: 1, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:4, speed:2}} },
+		balloon_red: { margin: {left:0, top:1, right:0, bottom:1}, scale: 2, image: {w:16, h:27}, walk_speed: 2, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:8, speed:2}} },
+		balloon_blue: { margin: {left:0, top:1, right:0, bottom:1}, scale: 2, image: {w:16, h:27}, walk_speed: 2, animations: {idle: {x:0, y:0, frames:4, speed:2}, moving: {x:0, y:1, frames:8, speed:2}} },
 	},
 	item: {
-		coin_1: { scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:12, speed:2}} },
-		honey_1: { scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		heart_1: { scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		key_1: { scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		mush_1: { scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		mush_2: { scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		mush_3: { scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
-		mush_4: { scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
+		coin_1: {margin: {left:3, top:3, right:3, bottom:3}, scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:12, speed:2}} },
+		honey_1: {margin: {left:3, top:3, right:3, bottom:3}, scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
+		heart_1: {margin: {left:3, top:3, right:3, bottom:3}, scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
+		key_1: {margin: {left:3, top:3, right:3, bottom:3}, scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
+		mush_1: {margin: {left:3, top:3, right:3, bottom:3}, scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
+		mush_2: {margin: {left:3, top:3, right:3, bottom:3}, scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
+		mush_3: {margin: {left:3, top:3, right:3, bottom:3}, scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
+		mush_4: {margin: {left:3, top:3, right:3, bottom:3}, scale:2, image: {w:16, h:16}, animations: {idle: {x:0, y:0, frames:4, speed:2}} },
 	}
 };
 
@@ -30,7 +30,7 @@ var Objects = {
 var objectMethods = {
 	'generic': {
 		'findKey': function(type) {
-			return Object.keys(World.map.objects[this.type]).find(key => World.map.objects[this.type][key] === this);
+			return Object.keys(World.map.objects[this.type]).find(key => World.map.objects[this.type][key] === this); //firstly for collision
 		}
 	},
 	'mob': {

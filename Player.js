@@ -14,7 +14,8 @@ var player = {
 			ascending: {x:0, y:2, frames:1, speed:2},
 			descending: {x:1, y:2, frames:1, speed:2},
 			climbing: {x:3, y:4, frames:1, speed:5},
-			hurt: {x:0, y:5, frames:6, speed:0.8},
+			//hurt: {x:0, y:5, frames:6, speed:0.8},
+			hurt: {x:0, y:5, frames:1, speed:0.8},
 		}
 	},
 	hair: {style:null, color:null}, //bald by default
@@ -189,23 +190,13 @@ var player = {
 			at_climbable = player.collideWithClimbables({"coords":collide_climbables_coords});
 		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
 		//handle colliding with objects (like items or mobs)
 		var collided_object = player.collideWithObjects();
-		//console.log(colliding_with_object);
 		if(collided_object) {
 			if(collided_object.type == 'item') {
 				//items go into players inventory
 				var is_item_added = player.inventory.addItem({item_id:collided_object.id, count:(typeof collided_object.count != 'undefined' ? collided_object.id : 1)});
 				if(is_item_added) {
-					//TODO: animate the item moving towards the player
 					//TODO: animate the item moving towards the player
 					player.sfx.collect_item.play();
 					World.map.objects["item"].splice( collided_object.findKey(), 1 );
@@ -216,34 +207,11 @@ var player = {
 					//console.log('damage player');
 					player.invincibility_timer = player.invincibility_time;
 					//TODO: make the player jump backwards
-					player.velocity.y = -3;
+					//player.velocity.y = -3;
 					player.sfx.hurt.play();
 				}
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		if(player.movement_state == 'climbing') {
 			//TODO: handle the climbing case
@@ -512,19 +480,19 @@ var player = {
 				colliding = CollisionDetection.isColliding([
 					//player
 					{
-						x: player.coords.x,
+						x: player.coords.x + (player.image.margin_sides * player.image.scale),
 						y: player.coords.y,
-						w: player.image.width*player.image.scale,
+						w: player.image.width*player.image.scale - ((player.image.margin_sides*2) * player.image.scale),
 						z: player.image.height*player.image.scale
 					},
 					//object
 					{
-						x: World.map.objects[type][object_id].coords.x,
-						y: World.map.objects[type][object_id].coords.y,
-						w: World.map.objects[type][object_id].image.w * World.map.objects[type][object_id].scale,
-						z: World.map.objects[type][object_id].image.h * World.map.objects[type][object_id].scale
+						x: World.map.objects[type][object_id].coords.x + (World.map.objects[type][object_id].margin.left * World.map.objects[type][object_id].scale),
+						y: World.map.objects[type][object_id].coords.y + (World.map.objects[type][object_id].margin.top * World.map.objects[type][object_id].scale),
+						w: (World.map.objects[type][object_id].image.w * World.map.objects[type][object_id].scale) - (World.map.objects[type][object_id].margin.left * World.map.objects[type][object_id].scale) - (World.map.objects[type][object_id].margin.right * World.map.objects[type][object_id].scale),
+						z: (World.map.objects[type][object_id].image.h * World.map.objects[type][object_id].scale) - (World.map.objects[type][object_id].margin.top * World.map.objects[type][object_id].scale) - (World.map.objects[type][object_id].margin.bottom * World.map.objects[type][object_id].scale),
 					}
-				]);
+				], false);
 				if(colliding) {
 					return World.map.objects[type][object_id];
 				}
