@@ -2,6 +2,8 @@
 var player = {
 	name: "player",
 	race: "human", //player will be able to choose a race
+	invincibility_time: 0.5 * config.frame_rate, //seconds of invincibility when the player gets hurt
+	invincibility_timer: 0,
 	image: {
 		width:16, height:16, scale:2, margin_sides:3, sprite_sheet: new Image(), //margin_sides means the empty space on the sides of the character, for collision
 		animation: {
@@ -12,6 +14,7 @@ var player = {
 			ascending: {x:0, y:2, frames:1, speed:2},
 			descending: {x:1, y:2, frames:1, speed:2},
 			climbing: {x:3, y:4, frames:1, speed:5},
+			hurt: {x:0, y:5, frames:6, speed:0.8},
 		}
 	},
 	hair: {style:null, color:null}, //bald by default
@@ -19,6 +22,7 @@ var player = {
 		jump: SoundEngine.getSfx({file: "player/jump_1.wav"}),
 		land: SoundEngine.getSfx({file: "player/land_1.ogg"}),
 		collect_item: SoundEngine.getSfx({file: "collect-item.wav"}),
+		hurt: SoundEngine.getSfx({file: "player/hurt_c_08-102842.mp3"}),
 	},
 	inventory: {
 		active_category: "cat_1",
@@ -106,6 +110,10 @@ var player = {
 		//control speed
 		if(!config.paused) player.speed = player.walk_speed;
 		else player.speed = 0;
+		
+		if(player.invincibility_timer > 0) {
+			player.invincibility_timer--;
+		}
 		
 		//jump - keeps jumping if holding down key. otherwise, currently handled in InputManager
 		/*if(inputManager.key_space) {
@@ -198,12 +206,19 @@ var player = {
 				var is_item_added = player.inventory.addItem({item_id:collided_object.id, count:(typeof collided_object.count != 'undefined' ? collided_object.id : 1)});
 				if(is_item_added) {
 					//TODO: animate the item moving towards the player
+					//TODO: animate the item moving towards the player
 					player.sfx.collect_item.play();
 					World.map.objects["item"].splice( collided_object.findKey(), 1 );
 				}
 			} else if(collided_object.type == 'mob') {
 				//mobs hurt the player
-				console.log('damage player');
+				if(player.invincibility_timer == 0) {
+					//console.log('damage player');
+					player.invincibility_timer = player.invincibility_time;
+					//TODO: make the player jump backwards
+					player.velocity.y = -3;
+					player.sfx.hurt.play();
+				}
 			}
 		}
 		
@@ -308,6 +323,22 @@ var player = {
 			if(player.velocity.y < 0) player.movement_state = 'ascending';
 			//if(player.velocity.y > 0) player.movement_state = 'descending';
 			if(player.velocity.y > 0 && player.movement_state != 'climbing') player.movement_state = 'descending';
+		}
+		
+		
+		
+		
+		
+		//make the player blink while under invicibility
+		if(player.invincibility_timer > 0) {
+			//invincible
+			if(player.invincibility_timer % 2) {
+				return;
+			} else {
+				player.movement_state = 'hurt';
+			}
+		} else {
+			//not invincible
 		}
 		
 		var animation = player.image.animation[player.movement_state];

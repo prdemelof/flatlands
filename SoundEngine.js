@@ -42,12 +42,13 @@ var SoundEngine = {
 	changeVolume: function(o) {
 		//change the volume of currently playing sounds
 		if(o.type == 'music') {
-			//if(Options.get().music.play) {
 			if(typeof SoundEngine.music == 'object') {
 				SoundEngine.music.volume = o.volume / 10;
 			}
 		} else if(o.type == 'sfx') {
-			//if(Options.get().music.play) {
+			
+			//TODO: individual controls for each kind of sound effect? or each individual sound file?
+			
 			for(var i=0; i<SoundEngine.sfx.length; i++) {
 				if(typeof SoundEngine.sfx[i] == 'object') {
 					SoundEngine.sfx[i].volume = o.volume / 10;
