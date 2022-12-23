@@ -8,6 +8,7 @@ var CollisionDetection = {
 				w: //width
 			}, two: ...
 		]*/
+		
 		//SHOW BOUNDING BOX
 		if(false || (typeof render != 'undefined' && render)) {
 			hud.canvas.fillStyle = "purple";

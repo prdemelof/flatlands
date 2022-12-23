@@ -133,7 +133,7 @@ $('.spawner').click(function() {
 	} else {
 		var coords_y = (player.coords.y + (player.image.height*player.image.scale)) - Objects[$(this).attr('data-type')][$(this).attr('data-item-id')].image.h;
 	}
-	World.spawnObject({"type":$(this).attr('data-type'), "object_id":$(this).attr('data-item-id'), "count":1, "coords": { "x":( player.dir == 'left' ? player.coords.x-32 : player.coords.x+32 ), "y": coords_y } });
+	World.spawnObject({"type":$(this).attr('data-type'), "object_id":$(this).attr('data-item-id'), "count":1, "coords": { "x":( player.dir == 'left' ? player.coords.x-33 : player.coords.x+33 ), "y": coords_y } });
 });
 
 //TESTING STUFF

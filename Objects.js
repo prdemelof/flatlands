@@ -28,6 +28,11 @@ var Objects = {
 
 //common methods to be added to all objects on instantiation
 var objectMethods = {
+	'generic': {
+		'findKey': function(type) {
+			return Object.keys(World.map.objects[this.type]).find(key => World.map.objects[this.type][key] === this);
+		}
+	},
 	'mob': {
 		'getCollisionRange': function() {
 			var tiles = 1;
@@ -274,7 +279,9 @@ var objectMethods = {
 
 //common properties to be added to all objects on instantiation
 var objectProperties = {
+	'generic': {},
 	'mob': {
+		'type': 'mob', //yeah we're going to hardcode to make it simple.. not too hard to maintain. firstly using for collision system
 		'dir': 'right',
 		'speed': 0,
 		'velocity': {y:0.0},
@@ -284,6 +291,12 @@ var objectProperties = {
 			'period_dir': 0, //how long to remain on this dir until we roll again
 			'period_movement_state': 0 //how long to remain on this movement state until we roll again
 		}
+	},
+	'npc': {
+		'type': 'npc', //yeah we're going to hardcode to make it simple.. not too hard to maintain. firstly using for collision system
+	},
+	'item': {
+		'type': 'item', //yeah we're going to hardcode to make it simple.. not too hard to maintain. firstly using for collision system
 	}
 };
 

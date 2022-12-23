@@ -6,7 +6,7 @@ var World = {
 	season: "spring",
 	sky_color: "#55b4ff",
 	gravity: 1,
-	max_mobs: 8,
+	max_mobs: 0,
 	//size: {x:hud.canvas_parent.width / 32, y:0}, //not working because the world is created after setting canvas size
 	size: {x:0, y:0},
 	draw_margin: {top:10, left:10, right:10, bottom:10}, //amount of tiles to draw around the camera view range
@@ -67,7 +67,10 @@ var World = {
 			}
 		}
 		//randomly spawn mobs up to a certain limit
-		if(typeof World.map.objects['mob'] == 'undefined' || World.map.objects['mob'].length < World.max_mobs) {
+		if(
+			World.max_mobs > 0 &&
+			(typeof World.map.objects['mob'] == 'undefined' || World.map.objects['mob'].length < World.max_mobs)
+		) {
 			var foo = Math.random() * 100;
 			if(foo <= 0.5) { //% chance to spawn a new mob at this tick
 				var mobs = Object.keys(Objects.mob);
@@ -128,6 +131,8 @@ var World = {
 			new_object.image.file = System.loadImage({path: "image/spritesheets/"+o.type+"/"+o.object_id+".png"});
 			//new_object.image.file.src = "image/spritesheets/"+o.type+"/"+o.object_id+".png";
 			//handle functions
+			addProperties(new_object, objectProperties['generic']);
+			addMethods(new_object, objectMethods['generic']);
 			if(o.type == 'mob') {
 				addProperties(new_object, objectProperties['mob']);
 				addMethods(new_object, objectMethods['mob']);
@@ -135,6 +140,10 @@ var World = {
 				//new_object.update = function() {};
 				//addProperties(new_object, objectProperties['npc']);
 				//addMethods(new_object, objectMethods['npc']);
+			} else if(o.type == 'item') {
+				//new_object.update = function() {};
+				addProperties(new_object, objectProperties['item']);
+				//addMethods(new_object, objectMethods['item']);
 			}
 			//put this object into the main map objects array
 			if(typeof World.map.objects[o.type] == 'undefined') {

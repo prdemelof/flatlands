@@ -18,6 +18,7 @@ var player = {
 	sfx: {
 		jump: SoundEngine.getSfx({file: "player/jump_1.wav"}),
 		land: SoundEngine.getSfx({file: "player/land_1.ogg"}),
+		collect_item: SoundEngine.getSfx({file: "collect-item.wav"}),
 	},
 	inventory: {
 		active_category: "cat_1",
@@ -180,6 +181,55 @@ var player = {
 			at_climbable = player.collideWithClimbables({"coords":collide_climbables_coords});
 		}
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		//handle colliding with objects (like items or mobs)
+		var collided_object = player.collideWithObjects();
+		//console.log(colliding_with_object);
+		if(collided_object) {
+			if(collided_object.type == 'item') {
+				//items go into players inventory
+				var is_item_added = player.inventory.addItem({item_id:collided_object.id, count:(typeof collided_object.count != 'undefined' ? collided_object.id : 1)});
+				if(is_item_added) {
+					//TODO: animate the item moving towards the player
+					player.sfx.collect_item.play();
+					World.map.objects["item"].splice( collided_object.findKey(), 1 );
+				}
+			} else if(collided_object.type == 'mob') {
+				//mobs hurt the player
+				console.log('damage player');
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		if(player.movement_state == 'climbing') {
 			//TODO: handle the climbing case
 		} else {
@@ -337,6 +387,7 @@ var player = {
 		} else {
 			player.image.animation.frames_passed++;
 		}
+		
 	},
 	setHairStyle: function(hair_id) {
 		//choose a new hair style
@@ -412,96 +463,41 @@ var player = {
 		};
 	},
 	collideWithObjects: function(o) {
-		
-		//NOT IMPLEMENTED
-		return;
-		
-		if(player.movement_state == 'idle') {
-			//not moving, obviously not going to collide (edit: unless falling into something)
-			//return false;
-		}
-		if( // o.
-			typeof World.map.tileset.colliders == 'undefined' || !World.map.tileset.colliders.length()
-		) {
-			//no collidable object in the tilesheet
-			return false;
-		}
-		
-		for(var layer=0; layer<World.map.layers.length; layer++) {
-			
-			//if( World.map.layers[layer].type == 'tilelayer' && World.map.layers[layer].visible ) {
-			if( true ) { //we dont check if the layer is visible because we might want invisible colliders
-				//only scan for collisions near the player
-				var view_range = player.getCollisionRange();
-				for(var y=view_range.top; y<view_range.bottom; y++) {
-					//any better way to handle this?
-					if(y<0) {continue;} //too much margin, skip this inexistent row
-					else if(y>World.size.y) break; //reached the bottom, stop everything
-					var row = World.map.layers[layer].data[y];
-					for(var x=view_range.left; x<view_range.right; x++) {
-						if(x<0) {continue;} //too much margin, skip this inexistent tile
-						else if(x>World.size.x) break; //reached the farthest, next row
-						
-						//if getting x then ignore tiles above and below
-						if(
-							(typeof o != 'undefined' && o.dir == 'x') &&
-							(y >= ( player.coords.y / World.map.tileset.tileheight ) || y > ( player.coords.y / World.map.tileset.tileheight ))
-						) {
-							continue;
-						}
-						
-						//why row becomes undefined???
-						if(typeof row == 'undefined') {
-							continue;
-						}
-						
-						var tile_id = row[x];
-						if(!tile_id) continue; //empty tile, void
-						tile_id--; //we need this because the tileset doesnt start at 0, it starts at 1
-						
-						//if(typeof World.map.tileset.tiles[tile_id] == 'undefined' || !World.map.tileset.tiles[tile_id].visible) {
-						if(typeof World.map.tileset.colliders[tile_id] == 'undefined' ) {
-							//this tile is not collidable or is disabled
-							continue;
-						}
-						
-						var next_step = $.parseJSON(JSON.stringify(player.coords));
-						if(!player.on_ground && player.movement_state == 'ascending') {
-							next_step.y = next_step.y + player.velocity.y;
-						} else if(!player.on_ground && player.movement_state == 'descending') {
-							next_step.y = next_step.y + player.velocity.y;
-						} else if(typeof o != 'undefined' && o.dir == 'y') {
-							next_step.y = next_step.y + player.velocity.y+1;
-						}
-						if(inputManager.key_a) {
-							next_step.x = next_step.x - player.speed;
-						} else if(inputManager.key_d) {
-							next_step.x = next_step.x + player.speed;
-						}
-						
-						colliding = CollisionDetection.isColliding([
-							{x:next_step.x, y:next_step.y, z:player.image.height*player.image.scale, w:player.image.width*player.image.scale},
-							//tile
-							{
-								x: World.map.tileset.tilewidth * x, y: (World.map.tileset.tileheight * y),
-								z: World.map.tileset.tileheight, w: World.map.tileset.tileheight
-							}
-						]);
-						
-						if(colliding) {
-							if(!player.on_ground && player.movement_state == 'ascending') {
-								config.player_start_coords.y = (y*32) + 32 + (player.image.height*player.image.scale);
-							} else if(!player.on_ground && player.movement_state == 'descending') {
-								config.player_start_coords.y = (y*32) - 32;
-							}
-							return colliding;
-						}
-						
-					}
+		for(var type in World.map.objects) {
+			//TODO: collide with water?
+			if(type == "scene") continue;
+			//only scan for collisions near the player
+			var detection_range = player.getCollisionRange({type: "pixels"});
+			var colliding = false;
+			for(var object_id in World.map.objects[type]) {
+				if(!(
+					World.map.objects[type][object_id].coords.x > detection_range.left &&
+					World.map.objects[type][object_id].coords.x < detection_range.right &&
+					World.map.objects[type][object_id].coords.y > detection_range.top &&
+					World.map.objects[type][object_id].coords.y < detection_range.bottom
+				)) {
+					continue;
 				}
-				
+				colliding = CollisionDetection.isColliding([
+					//player
+					{
+						x: player.coords.x,
+						y: player.coords.y,
+						w: player.image.width*player.image.scale,
+						z: player.image.height*player.image.scale
+					},
+					//object
+					{
+						x: World.map.objects[type][object_id].coords.x,
+						y: World.map.objects[type][object_id].coords.y,
+						w: World.map.objects[type][object_id].image.w * World.map.objects[type][object_id].scale,
+						z: World.map.objects[type][object_id].image.h * World.map.objects[type][object_id].scale
+					}
+				]);
+				if(colliding) {
+					return World.map.objects[type][object_id];
+				}
 			}
-			
 		}
 		return false;
 	},
