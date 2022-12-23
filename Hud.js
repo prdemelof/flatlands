@@ -222,16 +222,18 @@ var hud = {
 			}
 			
 			//draw objects in the inventory
-			var active_category = "cat_1";
-			if( player.inventory[active_category].length() ) {
-				for(var slot_id in player.inventory[active_category]) {
-					var item = Objects.item[player.inventory[active_category][slot_id].item_id];
-					var image = System.loadImage({path: "image/spritesheets/item/"+player.inventory[active_category][slot_id].item_id+".png"});
+			
+			//if( player.inventory[player.inventory.active_category].content.length() ) {
+			var player_active_inventory = player.inventory.getActive();
+			if( player_active_inventory.length() ) {
+				for(var slot_id in player_active_inventory) {
+					var item = Objects.item[player_active_inventory[slot_id].item_id];
+					var image = System.loadImage({path: "image/spritesheets/item/"+player_active_inventory[slot_id].item_id+".png"});
 					
 					//TODO: this method to load image every single time sucks.. we have to either improve the system to do a proper
 					//asset management to avoid loading duplicate image files, and or change the item system to pre-load and hold their own images in the ram when the game launches
 					
-					var per_row = 5;
+					var per_row = player.inventory.max_cols;
 					var row = Math.ceil(slot_id / per_row) - 1;
 					var col = (((slot_id / per_row) - row) * per_row) - 1;
 					

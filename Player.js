@@ -1,7 +1,7 @@
 //PLAYER
 var player = {
 	name: "player",
-	race: 'human', //player will be able to choose a race
+	race: "human", //player will be able to choose a race
 	image: {
 		width:16, height:16, scale:2, margin_sides:3, sprite_sheet: new Image(), //margin_sides means the empty space on the sides of the character, for collision
 		animation: {
@@ -20,16 +20,56 @@ var player = {
 		land: SoundEngine.getSfx({file: "player/land_1.ogg"}),
 	},
 	inventory: {
-		cat_1: {
-			'1': {item_id:"mush_3", count:1},
-			'2': {item_id:"key_1", count:1},
-			'5': {item_id:"heart_1", count:1},
-			'13': {item_id:"mush_1", count:3},
+		active_category: "cat_1",
+		max_rows: 4,
+		max_cols: 5,
+		getActive: function() {
+			return player.inventory.content[player.inventory.active_category];
+		},
+		setActive: function(id) {
+			player.inventory.active_category = id;
+		},
+		findEmptySlot: function(o) {
+			var slot_id;
+			if( player.inventory.content[o.category_id].length() ) {
+				//theres always something in the inventory
+				for(var i=1; i<=player.inventory.max_rows * player.inventory.max_cols; i++) {
+					if( typeof player.inventory.content[o.category_id][i] == 'undefined' ) {
+						slot_id = i;
+						break;
+					}
+				}
+			} else {
+				//nothing in the inventory
+				slot_id = "1";
+			}
+			return slot_id;
+		},
+		addItem: function(o) {
+			//player.inventory.addItem({slot_id:1, item_id:"mush_3", count:1});
+			
+			//TODO: automatically find the correct category to put this item into
+			var category_id = "cat_1";
+			
+			var slot_id = ( typeof o.slot_id != 'undefined' ? o.slot_id : player.inventory.findEmptySlot({category_id: category_id}) );
+			if(typeof slot_id == 'undefined') {
+				//no space, no add anything
+				return false;
+			} else {
+				//enough space, add the item
+				player.inventory.content[category_id][slot_id] = {item_id: o.item_id, count: o.count};
+				return true;
+			}
+		},
+		content: {
+			"cat_1": {},
+			"cat_2": {}, //currently not in use
+			"cat_3": {}, //currently not in use
+			"cat_4": {}, //currently not in use
+			"cat_5": {}, //currently not in use
 		}
 	},
-	equipment: {
-		
-	},
+	equipment: {},
 	dir: 'right', //looking towards which direction
 	coords: {x:config.player_start_coords.x, y:config.player_start_coords.y},
 	velocity: {y:0.0}, //x velocity is currently being handled simply by "walk_speed"
@@ -594,5 +634,3 @@ var player = {
 		return $.inArray(tile_id, World.map.tileset.climbables) !== -1;
 	}
 };
-
-
