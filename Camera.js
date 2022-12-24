@@ -70,10 +70,10 @@ var Camera = {
 	getViewRange: function(o) {
 		if(typeof o != 'object' || typeof o.type != 'string' || o.type == 'tile') {
 			//return the tile count
-			var left = Math.floor( -Camera.offset.x / 32 );
-			var right = Math.ceil( left + (hud.canvas_parent.width / 32) ); //margin of error 1 tile towards the right
-			var top = Math.floor( Camera.offset.y / 32 );
-			var bottom = Math.ceil( top + (hud.canvas_parent.height / 32) ); //margin of error 1 tile towards the bottom
+			var left = Math.floor( -Camera.offset.x / World.map.tileset.tilewidth );
+			var right = Math.ceil( left + (hud.canvas_parent.width / World.map.tileset.tilewidth) ); //margin of error 1 tile towards the right
+			var top = Math.floor( Camera.offset.y / World.map.tileset.tileheight );
+			var bottom = Math.ceil( top + (hud.canvas_parent.height / World.map.tileset.tileheight) ); //margin of error 1 tile towards the bottom
 		} else {
 			//return the pixel count
 			var left = Math.floor( -Camera.offset.x );
@@ -81,7 +81,6 @@ var Camera = {
 			var top = Math.floor( Camera.offset.y );
 			var bottom = top + hud.canvas_parent.height;
 		}
-		//return {top:top, right:right, bottom:bottom, left:left};
 		return {top:top, left:left, right:right, bottom:bottom};
 	},
 	centerOnPlayer: function() {

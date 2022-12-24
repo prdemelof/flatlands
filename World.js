@@ -67,7 +67,10 @@ var World = {
 			}
 		}
 		//randomly spawn mobs up to a certain limit
-		if(typeof World.map.objects['mob'] == 'undefined' || World.map.objects['mob'].length < World.max_mobs) {
+		if(
+			World.max_mobs > 0 &&
+			(typeof World.map.objects['mob'] == 'undefined' || World.map.objects['mob'].length < World.max_mobs)
+		) {
 			var foo = Math.random() * 100;
 			if(foo <= 0.5) { //% chance to spawn a new mob at this tick
 				var mobs = Object.keys(Objects.mob);
@@ -88,7 +91,8 @@ var World = {
 					World.map.objects['mob'][i].coords.y < 0 || World.map.objects['mob'][i].coords.y + (World.map.objects['mob'][i].image.h * World.map.objects['mob'][i].scale) > (World.map.height * World.map.tileset.tileheight)
 				) {
 					//console.log('despawn OOB: ' + World.map.objects['mob'][i].id + ' '+World.map.objects['mob'][i].coords.x+','+World.map.objects['mob'][i].coords.y);
-					World.map.objects['mob'].splice(i, 1);
+					//World.map.objects['mob'].splice(i, 1);
+					World.despawnObject({type: "mob", index: i});
 				}
 			}
 		}
@@ -116,9 +120,7 @@ var World = {
 			};
 		}
 		if( !config.paused || (typeof o.ignore_pause != 'undefined' && o.ignore_pause) ) {
-			
-			//TODO: this entire thing sucks. need to find a better way to handle object instantiation
-			
+			//TODO: this entire thing sucks. need to find a better way to handle object instantiation, with prototyping or something
 			var new_object = structuredClone(Objects[o.type][o.object_id]);
 			//set important variables, such as this object's ID and it's image source
 			new_object.coords = { "x": spawn_coords.x, "y": spawn_coords.y };
@@ -127,9 +129,11 @@ var World = {
 			if(typeof new_object.animations != 'undefined') {
 				new_object.animation = {frame:0, frames_passed:0};
 			}
-			new_object.image.file = new Image();
-			new_object.image.file.src = "image/spritesheets/"+o.type+"/"+o.object_id+".png";
+			new_object.image.file = System.loadImage({path: "image/spritesheets/"+o.type+"/"+o.object_id+".png"});
+			//new_object.image.file.src = "image/spritesheets/"+o.type+"/"+o.object_id+".png";
 			//handle functions
+			addProperties(new_object, objectProperties['generic']);
+			addMethods(new_object, objectMethods['generic']);
 			if(o.type == 'mob') {
 				addProperties(new_object, objectProperties['mob']);
 				addMethods(new_object, objectMethods['mob']);
@@ -137,12 +141,21 @@ var World = {
 				//new_object.update = function() {};
 				//addProperties(new_object, objectProperties['npc']);
 				//addMethods(new_object, objectMethods['npc']);
+			} else if(o.type == 'item') {
+				//new_object.update = function() {};
+				addProperties(new_object, objectProperties['item']);
+				//addMethods(new_object, objectMethods['item']);
 			}
 			//put this object into the main map objects array
 			if(typeof World.map.objects[o.type] == 'undefined') {
 				World.map.objects[o.type] = [];
 			}
 			World.map.objects[o.type].push(new_object);
+		}
+	},
+	despawnObject: function(o) {
+		if(typeof o.coords == 'undefined') {
+			World.map.objects[o.type].splice(o.index, 1);
 		}
 	},
 	drawObjects: function() {
@@ -393,7 +406,3 @@ $(document).on('click', '#canvas_parent', function() {
 		});
 	}
 });
-
-//load tiles images
-// World.tiles.ground_middle.image.src = "image/tile.png";
-// World.tiles.ground_dirt.image.src = "image/tile_dirt.png";

@@ -2,18 +2,27 @@ var hud = {
 	canvas_parent: $('canvas')[0],
 	//start_menu_color: "#1e1e1e", //dark gray
 	font_size: 12,
-	font_family: 'Arial',
+	//font_family: 'Arial',
+	font_family: 'system-ui',
+	inventory: {
+		scale: 2, //this does not really work as expected. the window itself is not scaling, and thats intentional
+		max_rows: 8,
+		max_cols: 8,
+		image: null, //we really dont want to do this. we need separate sprites for each piece of a Window and assemble the entire box with the individual pieces
+		margin: 6, //(pixel) margin from the edge of the window to the point where we can start drawing stuff
+	},
 	start_menu_image: new Image(),
 	object_inspector_box_timeout: null,
 	platform: 'desktop',
 	mobile_controls: {
-		margin: 32, //margin from the endges of the screen
+		margin: 32, //margin from the edges of the screen
 		finger_dimensions: 60, //pixels
 	},
 	init: function() {
+		hud.inventory.image = System.loadImage({path: "image/hud/menu.png"});
 		if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
 			//mobile
-			console.log('hud init: mobile');
+			//console.log('hud init: mobile');
 			hud.platform = 'mobile';
 			
 			$('#canvas_parent').css('top', 0);
@@ -47,7 +56,7 @@ var hud = {
 			
 		} else {
 			//desktop
-			console.log('hud init: desktop');
+			//console.log('hud init: desktop');
 			hud.platform = 'desktop';
 			$('canvas')[0].width = $('#canvas_parent').innerWidth();
 			$('canvas')[0].height = $('#canvas_parent').innerHeight();
@@ -71,10 +80,14 @@ var hud = {
 	draw: function() {
 		//draw stuff
 		
+		hud.drawPlayerStats();
+		hud.drawInventory();
+		
 	},
 	setFont: function(o) {
 		hud.canvas.fillStyle = ( typeof o != 'undefined' && typeof o.color != 'undefined' ? o.color : 'black' );
 		hud.canvas.font = "" +
+			(typeof o != 'undefined' && typeof o.weight != 'undefined' ? o.weight+' ' : '' ) +
 			(typeof o != 'undefined' && typeof o.size != 'undefined' ? o.size : hud.font_size ) + "px " +
 			(typeof o != 'undefined' && typeof o.family != 'undefined' ? o.family : hud.font_family );
 		//hud.canvas.font = hud.font_size + "px "+hud.font_family;
@@ -121,8 +134,166 @@ var hud = {
 			$('#start_menu').show();
 		}
 	},
+	show_inventory: false,
+	toggleInventory: function(show) {
+		if(!config.paused) {
+			if(typeof show != 'undefined') {
+				hud.show_inventory = !show; //if show is false, we make it become true which will cause it to hide
+			}
+			if(hud.show_inventory) {
+				hud.show_inventory = false;
+			} else {
+				hud.show_inventory = true;
+			}
+		}
+	},
 	drawStartMenu: function() {
 		//hud.canvas.drawImage(hud.start_menu_image, 0, 0);
+	},
+	drawInventory: function() {
+		if(hud.show_inventory) {
+			
+			
+			
+			var camera_issue_workaround = ( ["moving", "ascending", "descending"].includes(player.movement_state) ? (player.dir == 'left' ? -player.speed : player.speed) : 0);
+			
+			
+			
+			//draw inventory UI (window)
+			hud.canvas.drawImage(
+				//image file
+				hud.inventory.image,
+				
+				//source coords
+				0,
+				0,
+				
+				//source dimensions
+				hud.inventory.image.width,
+				hud.inventory.image.height,
+				
+				//destination coords
+				128 + Camera.getViewRange({type:'pixel'}).left - camera_issue_workaround,
+				128 + Camera.getViewRange({type:'pixel'}).top,
+				
+				//destination dimensions
+				hud.inventory.image.width,
+				hud.inventory.image.height
+			);
+			
+			//draw player in the inventory
+			hud.canvas.drawImage(
+				//image file
+				player.image.sprite_sheet,
+				
+				//source coords
+				0,
+				0,
+				
+				//source dimensions
+				player.image.width,
+				player.image.height,
+				
+				//destination coords
+				128 + Camera.getViewRange({type:'pixel'}).left + (9 * hud.inventory.scale) - camera_issue_workaround,
+				128 + Camera.getViewRange({type:'pixel'}).top + (19 * hud.inventory.scale),
+				
+				//destination dimensions
+				(player.image.width * player.image.scale) * hud.inventory.scale,
+				(player.image.height * player.image.scale) * hud.inventory.scale
+			);
+			
+			//draw player hair (including the color change thing)
+			if( player.hair.style != null && player.hair.style.image != null ) {
+				var hair_width_difference = (player.hair.style.width - player.image.width) * hud.inventory.scale;
+				hud.canvas.drawImage(
+					//image file
+					player.hair.style.image,
+					
+					//source coords
+					0,
+					0,
+					
+					//source dimensions
+					player.hair.style.width,
+					player.hair.style.height,
+					
+					//destination coords
+					128 + Camera.getViewRange({type:'pixel'}).left + (9 * hud.inventory.scale) - (hair_width_difference * 2) - camera_issue_workaround,
+					128 + Camera.getViewRange({type:'pixel'}).top + (19 * hud.inventory.scale), //38,
+					
+					//destination dimensions
+					(player.hair.style.width * player.hair.style.scale) * hud.inventory.scale,
+					(player.hair.style.height * player.hair.style.scale) * hud.inventory.scale
+				);
+				
+				//update the hair color
+				if(player.hair.color != null) {
+					player.applyHairColor();
+				}
+			}
+			
+			//draw objects in the inventory
+			var player_active_inventory = player.inventory.getActive();
+			if( player_active_inventory.length() ) {
+				for(var slot_id in player_active_inventory) {
+					var item = Objects.item[player_active_inventory[slot_id].item_id];
+					var image = System.loadImage({path: "image/spritesheets/item/"+player_active_inventory[slot_id].item_id+".png"});
+					
+					//TODO: this method to load image every single time sucks.. we have to either improve the system to do a proper
+					//asset management to avoid loading duplicate image files, and or change the item system to pre-load and hold their own images in the ram when the game launches
+					
+					var per_row = hud.inventory.max_cols;
+					var row = Math.ceil(slot_id / per_row) - 1;
+					var col = (((slot_id / per_row) - row) * per_row) - 1;
+					var coords_x = (129 + Camera.getViewRange({type:'pixel'}).left) + (hud.inventory.margin * hud.inventory.scale) + (26 * col);
+					var coords_y = (128 + Camera.getViewRange({type:'pixel'}).top + (76 * hud.inventory.scale)) + (26 * row);
+					
+					hud.canvas.drawImage(
+						//image file
+						image,
+						
+						//source coords
+						0,
+						0,
+						
+						//source dimensions
+						item.image.w,
+						item.image.h,
+						
+						//destination coords
+						coords_x - camera_issue_workaround,
+						coords_y,
+						
+						//destination dimensions
+						//item.image.w * (hud.inventory.scale/2),
+						//item.image.h * (hud.inventory.scale/2)
+						item.image.w,
+						item.image.h
+					);
+				}
+			}
+			
+			//draw play statuses
+			if(true) {
+				
+				//life
+				hud.setFont({weight:"bold", color:"#95757e", size:"12"});
+				hud.canvas.fillText(
+					player.status.hp + "%",
+					310 + Camera.getViewRange({type:'pixel'}).left - camera_issue_workaround,
+					166 + Camera.getViewRange({type:'pixel'}).top
+				);
+				
+				//stamina
+				
+				
+				//...
+				
+				
+			}
+			
+		}
 	},
 	drawInspection: function(o) {
 		$('#object_inspector_box p').html(o.text);
