@@ -91,7 +91,8 @@ var World = {
 					World.map.objects['mob'][i].coords.y < 0 || World.map.objects['mob'][i].coords.y + (World.map.objects['mob'][i].image.h * World.map.objects['mob'][i].scale) > (World.map.height * World.map.tileset.tileheight)
 				) {
 					//console.log('despawn OOB: ' + World.map.objects['mob'][i].id + ' '+World.map.objects['mob'][i].coords.x+','+World.map.objects['mob'][i].coords.y);
-					World.map.objects['mob'].splice(i, 1);
+					//World.map.objects['mob'].splice(i, 1);
+					World.despawnObject({type: "mob", index: i});
 				}
 			}
 		}
@@ -150,6 +151,11 @@ var World = {
 				World.map.objects[o.type] = [];
 			}
 			World.map.objects[o.type].push(new_object);
+		}
+	},
+	despawnObject: function(o) {
+		if(typeof o.coords == 'undefined') {
+			World.map.objects[o.type].splice(o.index, 1);
 		}
 	},
 	drawObjects: function() {

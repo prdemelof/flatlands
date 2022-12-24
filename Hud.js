@@ -2,9 +2,10 @@ var hud = {
 	canvas_parent: $('canvas')[0],
 	//start_menu_color: "#1e1e1e", //dark gray
 	font_size: 12,
-	font_family: 'Arial',
+	//font_family: 'Arial',
+	font_family: 'system-ui',
 	inventory: {
-		scale: 2,
+		scale: 2, //this does not really work as expected. the window itself is not scaling, and thats intentional
 		max_rows: 8,
 		max_cols: 8,
 		image: null, //we really dont want to do this. we need separate sprites for each piece of a Window and assemble the entire box with the individual pieces
@@ -79,12 +80,14 @@ var hud = {
 	draw: function() {
 		//draw stuff
 		
+		hud.drawPlayerStats();
 		hud.drawInventory();
 		
 	},
 	setFont: function(o) {
 		hud.canvas.fillStyle = ( typeof o != 'undefined' && typeof o.color != 'undefined' ? o.color : 'black' );
 		hud.canvas.font = "" +
+			(typeof o != 'undefined' && typeof o.weight != 'undefined' ? o.weight+' ' : '' ) +
 			(typeof o != 'undefined' && typeof o.size != 'undefined' ? o.size : hud.font_size ) + "px " +
 			(typeof o != 'undefined' && typeof o.family != 'undefined' ? o.family : hud.font_family );
 		//hud.canvas.font = hud.font_size + "px "+hud.font_family;
@@ -149,6 +152,13 @@ var hud = {
 	},
 	drawInventory: function() {
 		if(hud.show_inventory) {
+			
+			
+			
+			var camera_issue_workaround = ( ["moving", "ascending", "descending"].includes(player.movement_state) ? (player.dir == 'left' ? -player.speed : player.speed) : 0);
+			
+			
+			
 			//draw inventory UI (window)
 			hud.canvas.drawImage(
 				//image file
@@ -163,7 +173,7 @@ var hud = {
 				hud.inventory.image.height,
 				
 				//destination coords
-				128 + Camera.getViewRange({type:'pixel'}).left - ( ["moving", "ascending", "descending"].includes(player.movement_state) ? (player.dir == 'left' ? -player.speed : player.speed) : 0),
+				128 + Camera.getViewRange({type:'pixel'}).left - camera_issue_workaround,
 				128 + Camera.getViewRange({type:'pixel'}).top,
 				
 				//destination dimensions
@@ -185,8 +195,8 @@ var hud = {
 				player.image.height,
 				
 				//destination coords
-				128 + Camera.getViewRange({type:'pixel'}).left + (9 * hud.inventory.scale) - ( ["moving", "ascending", "descending"].includes(player.movement_state) ? (player.dir == 'left' ? -player.speed : player.speed) : 0), //18,
-				128 + Camera.getViewRange({type:'pixel'}).top + (19 * hud.inventory.scale), //38,
+				128 + Camera.getViewRange({type:'pixel'}).left + (9 * hud.inventory.scale) - camera_issue_workaround,
+				128 + Camera.getViewRange({type:'pixel'}).top + (19 * hud.inventory.scale),
 				
 				//destination dimensions
 				(player.image.width * player.image.scale) * hud.inventory.scale,
@@ -209,7 +219,7 @@ var hud = {
 					player.hair.style.height,
 					
 					//destination coords
-					128 + Camera.getViewRange({type:'pixel'}).left + (9 * hud.inventory.scale) - (hair_width_difference * 2) - ( ["moving", "ascending", "descending"].includes(player.movement_state) ? (player.dir == 'left' ? -player.speed : player.speed) : 0), //18,
+					128 + Camera.getViewRange({type:'pixel'}).left + (9 * hud.inventory.scale) - (hair_width_difference * 2) - camera_issue_workaround,
 					128 + Camera.getViewRange({type:'pixel'}).top + (19 * hud.inventory.scale), //38,
 					
 					//destination dimensions
@@ -252,7 +262,7 @@ var hud = {
 						item.image.h,
 						
 						//destination coords
-						coords_x - ( ["moving", "ascending", "descending"].includes(player.movement_state) ? (player.dir == 'left' ? -player.speed : player.speed) : 0),
+						coords_x - camera_issue_workaround,
 						coords_y,
 						
 						//destination dimensions
@@ -262,6 +272,25 @@ var hud = {
 						item.image.h
 					);
 				}
+			}
+			
+			//draw play statuses
+			if(true) {
+				
+				//life
+				hud.setFont({weight:"bold", color:"#95757e", size:"12"});
+				hud.canvas.fillText(
+					player.status.hp + "%",
+					310 + Camera.getViewRange({type:'pixel'}).left - camera_issue_workaround,
+					166 + Camera.getViewRange({type:'pixel'}).top
+				);
+				
+				//stamina
+				
+				
+				//...
+				
+				
 			}
 			
 		}

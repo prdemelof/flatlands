@@ -4,6 +4,9 @@ var player = {
 	race: "human", //player will be able to choose a race
 	invincibility_time: 0.5 * config.frame_rate, //seconds of invincibility when the player gets hurt
 	invincibility_timer: 0,
+	status: {
+		hp: 100
+	},
 	image: {
 		width:16, height:16, scale:2, margin_sides:3, sprite_sheet: new Image(), //margin_sides means the empty space on the sides of the character, for collision
 		animation: {
@@ -24,6 +27,8 @@ var player = {
 		land: SoundEngine.getSfx({file: "player/land_1.ogg"}),
 		collect_item: SoundEngine.getSfx({file: "collect-item.wav"}),
 		hurt: SoundEngine.getSfx({file: "player/hurt_c_08-102842.mp3"}),
+		heal: SoundEngine.getSfx({file: "player/short-mixkit-bubbly-achievement-tone-3193.wav"}),
+		death: SoundEngine.getSfx({file: "player/mixkit-player-losing-or-failing-2042.wav"}),
 	},
 	inventory: {
 		active_category: "cat_1",
@@ -110,6 +115,8 @@ var player = {
 		if(!config.paused) player.speed = player.walk_speed;
 		else player.speed = 0;
 		
+		if(player.status.hp <= 0) return;
+		
 		if(player.invincibility_timer > 0) {
 			player.invincibility_timer--;
 		}
@@ -193,20 +200,45 @@ var player = {
 		if(collided_object) {
 			if(collided_object.type == 'item') {
 				//items go into players inventory
-				var is_item_added = player.inventory.addItem({item_id:collided_object.id, count:(typeof collided_object.count != 'undefined' ? collided_object.id : 1)});
-				if(is_item_added) {
-					//TODO: animate the item moving towards the player
-					player.sfx.collect_item.play();
-					World.map.objects["item"].splice( collided_object.findKey(), 1 );
+				
+				if(collided_object.id == "heart_1") {
+					
+					//this healing is temporary only. it should just add into inventory and player heal by using the item in inventory.. not just by touching it in the world
+					player.sfx.heal.play();
+					player.status.hp = player.status.hp + collided_object.effects.hp;
+					World.despawnObject({type: "item", index: collided_object.findKey()});
+					
+					
+				} else {
+					var is_item_added = player.inventory.addItem({item_id:collided_object.id, count:(typeof collided_object.count != 'undefined' ? collided_object.id : 1)});
+					if(is_item_added) {
+						//TODO: animate the item moving towards the player
+						player.sfx.collect_item.play();
+						//World.map.objects["item"].splice( collided_object.findKey(), 1 );
+						World.despawnObject({type: "item", index: collided_object.findKey()});
+					}
 				}
 			} else if(collided_object.type == 'mob') {
 				//mobs hurt the player
 				if(player.invincibility_timer == 0) {
-					//console.log('damage player');
 					player.invincibility_timer = player.invincibility_time;
-					//TODO: make the player jump backwards
-					//player.velocity.y = -3;
+					//player.velocity.y = -3; //TODO: make the player jump backwards a little (not just upwards)
 					player.sfx.hurt.play();
+					
+					//TODO: come up with a more interesting formula for damage calculation based on player armor, status effect, buffs, luck, blessings, curses, etc
+					player.status.hp = player.status.hp - collided_object.status_temporary.str;
+					
+					//check if player character is dead
+					if(player.status.hp <= 0) {
+						
+						//TODO...
+						console.log('death');
+						player.sfx.death.play();
+						player.walk_speed = 0;
+						player.speed = 0;
+						return;
+						
+					}
 				}
 			}
 		}
