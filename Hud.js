@@ -5,6 +5,8 @@ var hud = {
 	font_family: 'Arial',
 	inventory: {
 		scale: 2,
+		max_rows: 8,
+		max_cols: 8,
 		image: null, //we really dont want to do this. we need separate sprites for each piece of a Window and assemble the entire box with the individual pieces
 		margin: 6, //(pixel) margin from the edge of the window to the point where we can start drawing stuff
 	},
@@ -165,8 +167,8 @@ var hud = {
 				128 + Camera.getViewRange({type:'pixel'}).top,
 				
 				//destination dimensions
-				hud.inventory.image.width * hud.inventory.scale,
-				hud.inventory.image.height * hud.inventory.scale
+				hud.inventory.image.width,
+				hud.inventory.image.height
 			);
 			
 			//draw player in the inventory
@@ -190,6 +192,7 @@ var hud = {
 				(player.image.width * player.image.scale) * hud.inventory.scale,
 				(player.image.height * player.image.scale) * hud.inventory.scale
 			);
+			
 			//draw player hair (including the color change thing)
 			if( player.hair.style != null && player.hair.style.image != null ) {
 				var hair_width_difference = (player.hair.style.width - player.image.width) * hud.inventory.scale;
@@ -221,7 +224,6 @@ var hud = {
 			}
 			
 			//draw objects in the inventory
-			
 			var player_active_inventory = player.inventory.getActive();
 			if( player_active_inventory.length() ) {
 				for(var slot_id in player_active_inventory) {
@@ -231,12 +233,11 @@ var hud = {
 					//TODO: this method to load image every single time sucks.. we have to either improve the system to do a proper
 					//asset management to avoid loading duplicate image files, and or change the item system to pre-load and hold their own images in the ram when the game launches
 					
-					var per_row = player.inventory.max_cols;
+					var per_row = hud.inventory.max_cols;
 					var row = Math.ceil(slot_id / per_row) - 1;
 					var col = (((slot_id / per_row) - row) * per_row) - 1;
-					
-					var coords_x = (128 + Camera.getViewRange({type:'pixel'}).left) + (44 * col) + (hud.inventory.margin * hud.inventory.scale);
-					var coords_y = (128 + Camera.getViewRange({type:'pixel'}).top + (76 * hud.inventory.scale)) + (44 * row);
+					var coords_x = (129 + Camera.getViewRange({type:'pixel'}).left) + (hud.inventory.margin * hud.inventory.scale) + (26 * col);
+					var coords_y = (128 + Camera.getViewRange({type:'pixel'}).top + (76 * hud.inventory.scale)) + (26 * row);
 					
 					hud.canvas.drawImage(
 						//image file
@@ -255,21 +256,13 @@ var hud = {
 						coords_y,
 						
 						//destination dimensions
-						item.image.w * hud.inventory.scale,
-						item.image.h * hud.inventory.scale
+						//item.image.w * (hud.inventory.scale/2),
+						//item.image.h * (hud.inventory.scale/2)
+						item.image.w,
+						item.image.h
 					);
 				}
 			}
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			
 		}
 	},

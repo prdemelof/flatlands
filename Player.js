@@ -27,8 +27,6 @@ var player = {
 	},
 	inventory: {
 		active_category: "cat_1",
-		max_rows: 4,
-		max_cols: 5,
 		getActive: function() {
 			return player.inventory.content[player.inventory.active_category];
 		},
@@ -39,7 +37,7 @@ var player = {
 			var slot_id;
 			if( player.inventory.content[o.category_id].length() ) {
 				//theres always something in the inventory
-				for(var i=1; i<=player.inventory.max_rows * player.inventory.max_cols; i++) {
+				for(var i=1; i<=hud.inventory.max_rows * hud.inventory.max_cols; i++) {
 					if( typeof player.inventory.content[o.category_id][i] == 'undefined' ) {
 						slot_id = i;
 						break;
