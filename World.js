@@ -6,7 +6,7 @@ var World = {
 	season: "spring",
 	sky_color: "#55b4ff",
 	gravity: 1,
-	max_mobs: 0,
+	max_mobs: 8,
 	//size: {x:hud.canvas_parent.width / 32, y:0}, //not working because the world is created after setting canvas size
 	size: {x:0, y:0},
 	draw_margin: {top:10, left:10, right:10, bottom:10}, //amount of tiles to draw around the camera view range
